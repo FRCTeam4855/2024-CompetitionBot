@@ -38,9 +38,9 @@ public final class Constants {
     
 
     public static final double kArmSetpoint1 = .5; // Intake
-    public static final double kArmSetpoint2 = 8.2; // Speaker
+    public static final double kArmSetpoint2 = 11; // Speaker
     public static final double kArmSetpoint3 = 90; // Amp
-    public static final double kArmSetpoint4 = 45; // Start Pos
+    public static final double kArmSetpoint4 = 15; // Start Pos
     public static final double kArmSetpoint5 = 90; // Trap
     public static final double kArmPivotSlop = 0; // acceptable range for arm extension setpoints
 
@@ -54,7 +54,7 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
-    public static final double kDirectionSlewRate = 1.2; // radians per second
+    public static final double kDirectionSlewRate = 5; // radians per second
     public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
     public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
     // Chassis configuration
@@ -132,7 +132,7 @@ public final class Constants {
     public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
-    public static final double kTurningP = .01;
+    public static final double kTurningP = 1;
     public static final double kTurningI = 0;
     public static final double kTurningD = .1;
     public static final double kTurningFF = 0;

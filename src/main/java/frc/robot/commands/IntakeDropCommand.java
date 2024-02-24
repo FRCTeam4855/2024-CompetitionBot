@@ -19,8 +19,6 @@ public class IntakeDropCommand extends Command {
     }
 
     public boolean isFinished() {
-
-            return true;
-        
+        return true;
     }
 }

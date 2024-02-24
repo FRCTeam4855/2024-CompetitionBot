@@ -27,6 +27,7 @@ import frc.robot.commands.IntakePickupCommand;
 import frc.robot.commands.IntakeDropCommand;
 import frc.robot.commands.IntakeStopCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /*
@@ -43,7 +44,10 @@ public class RobotContainer {
         XboxController m_driverController = new XboxController(kDriverControllerPort);
         // The Operator Controller
         XboxController m_operatorController = new XboxController(kOperatorControllerPort);
+        
         IntakeSubsystem intakeSubsystem;
+        FlywheelSubsystem flywheelSubsystem;
+        public boolean fieldOriented = false;
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -51,7 +55,10 @@ public class RobotContainer {
         public RobotContainer() {
                 // Configure the button bindings
                 configureButtonBindings();
+
                 intakeSubsystem = new IntakeSubsystem();
+                flywheelSubsystem = new FlywheelSubsystem();
+                
                 // Configure default commands
                 m_robotDrive.setDefaultCommand(
                                 // The left stick controls translation of the robot.
@@ -64,7 +71,7 @@ public class RobotContainer {
                                                                                 kDriveDeadband),
                                                                 -MathUtil.applyDeadband(m_driverController.getRightX(),
                                                                                 kDriveDeadband),
-                                                                false, true),
+                                                                fieldOriented, true),
                                                 m_robotDrive));
         }
 

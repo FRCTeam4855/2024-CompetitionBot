@@ -2,12 +2,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.Robot;
 
-public class IntakePickupCommand extends Command {
+public class IntakeInputCommand extends Command {
 
     private final IntakeSubsystem Intake;
 
-    public IntakePickupCommand(IntakeSubsystem thisIntake) {
+    public IntakeInputCommand(IntakeSubsystem thisIntake) {
         Intake = thisIntake;
     }
 
@@ -15,13 +16,14 @@ public class IntakePickupCommand extends Command {
     }
 
     public void execute() {
-        Intake.IntakeInput();
+        Intake.IntakeRun();
     }
 
     public boolean isFinished() {
-        /*//if ( !Intake.m_noteSensor.get()) {
-        if ( Intake.intakeSensor) {
+        /*//if ( !Intake.m_noteSensor.get()  || Intake.IntakeSpeed <= 0) {
+        if ( Intake.intakeSensor  || Intake.IntakeSpeed <= 0) {
             Intake.IntakeStop();
+            Intake.IntakeRun();
             return true;
         } else {
             return false;
