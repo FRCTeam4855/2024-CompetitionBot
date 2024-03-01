@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PrettyLights extends SubsystemBase {
-    
 
     public final static double RAINBOW_RAINBOWPALETTE = -.99;
     public final static double RAINBOW_PARTYPALETTE = -.97;
@@ -107,29 +106,31 @@ public class PrettyLights extends SubsystemBase {
     public final static double DARK_GRAY = .97;
     public final static double BLACK = .99;
     // private int PWM18 = new PWM(18);
-    
+
     double pattern = PrettyLights.C1_AND_C2_SINELON;
 
     public Spark leds = new Spark(0);
-    
 
-      
-// C1 is purple and C2 is gold
+    // C1 is purple and C2 is gold
     /**
-     * Sets the LEDs to a certain color. This function won't work when the robot is disabled.
-     * @param color the color to set the lights to, coordinated with the constants set as static in the Blinkin class
+     * Sets the LEDs to a certain color. This function won't work when the robot is
+     * disabled.
+     * 
+     * @param color the color to set the lights to, coordinated with the constants
+     *              set as static in the Blinkin class
      */
-     public void setLEDs(double color) {
-         pattern = color;
-         leds.set(color); 
-     }
+    public void setLEDs(double color) {
+        pattern = color;
+        leds.set(color);
+    }
 
     /**
      * Gets the current display pattern of the LEDs.
+     * 
      * @return a number between -1 and 1 corresponding to the current pattern
      */
     public double getLEDs() {
         return pattern;
     }
-    
+
 }

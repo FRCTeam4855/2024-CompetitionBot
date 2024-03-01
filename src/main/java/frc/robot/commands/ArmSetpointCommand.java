@@ -34,6 +34,11 @@ public class ArmSetpointCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return true;
+        if(Math.abs(armPivot.getPivotPosition() - armPivot.pivotSetpoint) < 2)
+        {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

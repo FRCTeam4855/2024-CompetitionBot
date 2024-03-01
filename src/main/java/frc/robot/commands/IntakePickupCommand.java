@@ -19,13 +19,15 @@ public class IntakePickupCommand extends Command {
     }
 
     public boolean isFinished() {
-        /*//if ( !Intake.m_noteSensor.get()) {
-        if ( Intake.intakeSensor) {
-            Intake.IntakeStop();
-            return true;
-        } else {
-            return false;
-        }*/
+        /*
+         * //if ( !Intake.m_noteSensor.get()) {
+         * if ( Intake.intakeSensor) {
+         * Intake.IntakeStop();
+         * return true;
+         * } else {
+         * return false;
+         * }
+         */
         return true;
     }
 }

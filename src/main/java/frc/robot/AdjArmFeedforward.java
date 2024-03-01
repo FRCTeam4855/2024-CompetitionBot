@@ -10,8 +10,10 @@ import edu.wpi.first.util.protobuf.ProtobufSerializable;
 import edu.wpi.first.util.struct.StructSerializable;
 
 /**
- * A helper class that computes feedforward outputs for a simple arm (modeled as a motor acting
- * against the force of gravity on a beam suspended at an angle).  Allows the gains to be modified
+ * A helper class that computes feedforward outputs for a simple arm (modeled as
+ * a motor acting
+ * against the force of gravity on a beam suspended at an angle). Allows the
+ * gains to be modified
  * while the method is running.
  */
 public class AdjArmFeedforward implements ProtobufSerializable, StructSerializable {
@@ -34,7 +36,8 @@ public class AdjArmFeedforward implements ProtobufSerializable, StructSerializab
   public static final ArmFeedforwardStruct struct = new ArmFeedforwardStruct();
 
   /**
-   * Creates a new AdjArmFeedforward with the specified gains. Units of the gain values will dictate
+   * Creates a new AdjArmFeedforward with the specified gains. Units of the gain
+   * values will dictate
    * units of the computed feedforward.
    *
    * @param ks The static gain.
@@ -58,7 +61,8 @@ public class AdjArmFeedforward implements ProtobufSerializable, StructSerializab
   }
 
   /**
-   * Creates a new AdjArmFeedforward with the specified gains. Acceleration gain is defaulted to zero.
+   * Creates a new AdjArmFeedforward with the specified gains. Acceleration gain
+   * is defaulted to zero.
    * Units of the gain values will dictate units of the computed feedforward.
    *
    * @param ks The static gain.
@@ -92,7 +96,7 @@ public class AdjArmFeedforward implements ProtobufSerializable, StructSerializab
    * @param kg The gravity gain.
    * @param kv The velocity gain.
    */
-  
+
   public void updateArmFeedforward(double nks, double nkg, double nkv) {
     ks = nks;
     kg = nkg;
@@ -102,10 +106,13 @@ public class AdjArmFeedforward implements ProtobufSerializable, StructSerializab
   /**
    * Calculates the feedforward from the gains and setpoints.
    *
-   * @param positionRadians The position (angle) setpoint. This angle should be measured from the
-   *     horizontal (i.e. if the provided angle is 0, the arm should be parallel with the floor). If
-   *     your encoder does not follow this convention, an offset should be added.
-   * @param velocityRadPerSec The velocity setpoint.
+   * @param positionRadians       The position (angle) setpoint. This angle should
+   *                              be measured from the
+   *                              horizontal (i.e. if the provided angle is 0, the
+   *                              arm should be parallel with the floor). If
+   *                              your encoder does not follow this convention, an
+   *                              offset should be added.
+   * @param velocityRadPerSec     The velocity setpoint.
    * @param accelRadPerSecSquared The acceleration setpoint.
    * @return The computed feedforward.
    */
@@ -118,13 +125,17 @@ public class AdjArmFeedforward implements ProtobufSerializable, StructSerializab
   }
 
   /**
-   * Calculates the feedforward from the gains and velocity setpoint (acceleration is assumed to be
+   * Calculates the feedforward from the gains and velocity setpoint (acceleration
+   * is assumed to be
    * zero).
    *
-   * @param positionRadians The position (angle) setpoint. This angle should be measured from the
-   *     horizontal (i.e. if the provided angle is 0, the arm should be parallel with the floor). If
-   *     your encoder does not follow this convention, an offset should be added.
-   * @param velocity The velocity setpoint.
+   * @param positionRadians The position (angle) setpoint. This angle should be
+   *                        measured from the
+   *                        horizontal (i.e. if the provided angle is 0, the arm
+   *                        should be parallel with the floor). If
+   *                        your encoder does not follow this convention, an
+   *                        offset should be added.
+   * @param velocity        The velocity setpoint.
    * @return The computed feedforward.
    */
   public double calculate(double positionRadians, double velocity) {
@@ -135,15 +146,20 @@ public class AdjArmFeedforward implements ProtobufSerializable, StructSerializab
   // formulas for the methods below:
 
   /**
-   * Calculates the maximum achievable velocity given a maximum voltage supply, a position, and an
-   * acceleration. Useful for ensuring that velocity and acceleration constraints for a trapezoidal
-   * profile are simultaneously achievable - enter the acceleration constraint, and this will give
+   * Calculates the maximum achievable velocity given a maximum voltage supply, a
+   * position, and an
+   * acceleration. Useful for ensuring that velocity and acceleration constraints
+   * for a trapezoidal
+   * profile are simultaneously achievable - enter the acceleration constraint,
+   * and this will give
    * you a simultaneously-achievable velocity constraint.
    *
-   * @param maxVoltage The maximum voltage that can be supplied to the arm.
-   * @param angle The angle of the arm. This angle should be measured from the horizontal (i.e. if
-   *     the provided angle is 0, the arm should be parallel with the floor). If your encoder does
-   *     not follow this convention, an offset should be added.
+   * @param maxVoltage   The maximum voltage that can be supplied to the arm.
+   * @param angle        The angle of the arm. This angle should be measured from
+   *                     the horizontal (i.e. if
+   *                     the provided angle is 0, the arm should be parallel with
+   *                     the floor). If your encoder does
+   *                     not follow this convention, an offset should be added.
    * @param acceleration The acceleration of the arm.
    * @return The maximum possible velocity at the given acceleration and angle.
    */
@@ -153,15 +169,20 @@ public class AdjArmFeedforward implements ProtobufSerializable, StructSerializab
   }
 
   /**
-   * Calculates the minimum achievable velocity given a maximum voltage supply, a position, and an
-   * acceleration. Useful for ensuring that velocity and acceleration constraints for a trapezoidal
-   * profile are simultaneously achievable - enter the acceleration constraint, and this will give
+   * Calculates the minimum achievable velocity given a maximum voltage supply, a
+   * position, and an
+   * acceleration. Useful for ensuring that velocity and acceleration constraints
+   * for a trapezoidal
+   * profile are simultaneously achievable - enter the acceleration constraint,
+   * and this will give
    * you a simultaneously-achievable velocity constraint.
    *
-   * @param maxVoltage The maximum voltage that can be supplied to the arm.
-   * @param angle The angle of the arm. This angle should be measured from the horizontal (i.e. if
-   *     the provided angle is 0, the arm should be parallel with the floor). If your encoder does
-   *     not follow this convention, an offset should be added.
+   * @param maxVoltage   The maximum voltage that can be supplied to the arm.
+   * @param angle        The angle of the arm. This angle should be measured from
+   *                     the horizontal (i.e. if
+   *                     the provided angle is 0, the arm should be parallel with
+   *                     the floor). If your encoder does
+   *                     not follow this convention, an offset should be added.
    * @param acceleration The acceleration of the arm.
    * @return The minimum possible velocity at the given acceleration and angle.
    */
@@ -171,16 +192,21 @@ public class AdjArmFeedforward implements ProtobufSerializable, StructSerializab
   }
 
   /**
-   * Calculates the maximum achievable acceleration given a maximum voltage supply, a position, and
-   * a velocity. Useful for ensuring that velocity and acceleration constraints for a trapezoidal
-   * profile are simultaneously achievable - enter the velocity constraint, and this will give you a
+   * Calculates the maximum achievable acceleration given a maximum voltage
+   * supply, a position, and
+   * a velocity. Useful for ensuring that velocity and acceleration constraints
+   * for a trapezoidal
+   * profile are simultaneously achievable - enter the velocity constraint, and
+   * this will give you a
    * simultaneously-achievable acceleration constraint.
    *
    * @param maxVoltage The maximum voltage that can be supplied to the arm.
-   * @param angle The angle of the arm. This angle should be measured from the horizontal (i.e. if
-   *     the provided angle is 0, the arm should be parallel with the floor). If your encoder does
-   *     not follow this convention, an offset should be added.
-   * @param velocity The velocity of the arm.
+   * @param angle      The angle of the arm. This angle should be measured from
+   *                   the horizontal (i.e. if
+   *                   the provided angle is 0, the arm should be parallel with
+   *                   the floor). If your encoder does
+   *                   not follow this convention, an offset should be added.
+   * @param velocity   The velocity of the arm.
    * @return The maximum possible acceleration at the given velocity.
    */
   public double maxAchievableAcceleration(double maxVoltage, double angle, double velocity) {
@@ -188,16 +214,21 @@ public class AdjArmFeedforward implements ProtobufSerializable, StructSerializab
   }
 
   /**
-   * Calculates the minimum achievable acceleration given a maximum voltage supply, a position, and
-   * a velocity. Useful for ensuring that velocity and acceleration constraints for a trapezoidal
-   * profile are simultaneously achievable - enter the velocity constraint, and this will give you a
+   * Calculates the minimum achievable acceleration given a maximum voltage
+   * supply, a position, and
+   * a velocity. Useful for ensuring that velocity and acceleration constraints
+   * for a trapezoidal
+   * profile are simultaneously achievable - enter the velocity constraint, and
+   * this will give you a
    * simultaneously-achievable acceleration constraint.
    *
    * @param maxVoltage The maximum voltage that can be supplied to the arm.
-   * @param angle The angle of the arm. This angle should be measured from the horizontal (i.e. if
-   *     the provided angle is 0, the arm should be parallel with the floor). If your encoder does
-   *     not follow this convention, an offset should be added.
-   * @param velocity The velocity of the arm.
+   * @param angle      The angle of the arm. This angle should be measured from
+   *                   the horizontal (i.e. if
+   *                   the provided angle is 0, the arm should be parallel with
+   *                   the floor). If your encoder does
+   *                   not follow this convention, an offset should be added.
+   * @param velocity   The velocity of the arm.
    * @return The minimum possible acceleration at the given velocity.
    */
   public double minAchievableAcceleration(double maxVoltage, double angle, double velocity) {

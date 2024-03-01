@@ -6,6 +6,7 @@ import com.revrobotics.SparkPIDController;
 
 import java.util.function.BooleanSupplier;
 
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,19 +37,21 @@ public class FlywheelSubsystem extends SubsystemBase {
         m_leftFlywheelSparkMax = new CANSparkMax(11, MotorType.kBrushless);
         m_rightFlywheelSparkMax.restoreFactoryDefaults();
         m_leftFlywheelSparkMax.restoreFactoryDefaults();
+        m_rightFlywheelSparkMax.setIdleMode(IdleMode.kCoast);
+        m_leftFlywheelSparkMax.setIdleMode(IdleMode.kCoast);
         m_rightFlywheelPIDController = m_rightFlywheelSparkMax.getPIDController();
         m_leftFlywheelPIDController = m_leftFlywheelSparkMax.getPIDController();
         m_rightFlywheelEncoder = m_rightFlywheelSparkMax.getEncoder();
         m_leftFlywheelEncoder = m_leftFlywheelSparkMax.getEncoder();
-        /*kP = .0005; 
+        kP = 0; 
         kI = 0;
         kD = 0; 
         kIz = 0; 
-        kFF = 0.000015;
+        kFF = 0.00017;
         //kFF = 0; 
         kMaxOutput = 1; 
         kMinOutput = 0;
-        MaxRPM = 2000;
+        MaxRPM = 2500;
         m_rightFlywheelPIDController.setP(kP);
         m_rightFlywheelPIDController.setI(kI);
         m_rightFlywheelPIDController.setD(kD);
@@ -62,12 +65,12 @@ public class FlywheelSubsystem extends SubsystemBase {
         m_leftFlywheelPIDController.setIZone(kIz);
         m_leftFlywheelPIDController.setFF(kFF);
         m_leftFlywheelPIDController.setOutputRange(kMinOutput, kMaxOutput);
-        m_leftFlywheelPIDController.setReference(0, CANSparkMax.ControlType.kVelocity);*/
-        m_rightFlywheelSparkMax.set(0);
-        m_leftFlywheelSparkMax.set(0);
+        m_leftFlywheelPIDController.setReference(0, CANSparkMax.ControlType.kVelocity);
+        //m_rightFlywheelSparkMax.set(0);
+        //m_leftFlywheelSparkMax.set(0);
         flywheelRunning=false;
 
-        /*SmartDashboard.putNumber("P Gain", kP);
+        SmartDashboard.putNumber("P Gain", kP);
         SmartDashboard.putNumber("I Gain", kI);
         SmartDashboard.putNumber("D Gain", kD);
         SmartDashboard.putNumber("I Zone", kIz);
@@ -76,7 +79,7 @@ public class FlywheelSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Min Output", kMinOutput);
         SmartDashboard.putNumber("Right Flywheel Speed", m_rightFlywheelEncoder.getVelocity());
         SmartDashboard.putNumber("Left Flywheel Speed", m_leftFlywheelEncoder.getVelocity());
-        SmartDashboard.putNumber("Flywheel Setpoint", MaxRPM);*/
+        SmartDashboard.putNumber("Flywheel Setpoint", MaxRPM);
     }
 
     @Override
@@ -86,8 +89,10 @@ public class FlywheelSubsystem extends SubsystemBase {
     }
 
     public void FlywheelStart(){
+      System.out.println("Entering FlywheelStart");
       if(!flywheelRunning) {
-        /*double p = SmartDashboard.getNumber("P Gain", 0);
+        System.out.println("Starting Flywheel");
+        double p = SmartDashboard.getNumber("P Gain", 0);
         double i = SmartDashboard.getNumber("I Gain", 0);
         double d = SmartDashboard.getNumber("D Gain", 0);
         double iz = SmartDashboard.getNumber("I Zone", 0);
@@ -103,7 +108,7 @@ public class FlywheelSubsystem extends SubsystemBase {
           m_rightFlywheelPIDController.setOutputRange(min, max);
           m_leftFlywheelPIDController.setOutputRange(min, max); 
           kMinOutput = min; kMaxOutput = max; 
-        }*/
+        }
           /*if((p != kP)) { m_leftFlywheelPIDController.setP(p); kP = p; }
           if((i != kI)) { m_leftFlywheelPIDController.setI(i); kI = i; }
           if((d != kD)) { m_leftFlywheelPIDController.setD(d); kD = d; }
@@ -113,42 +118,37 @@ public class FlywheelSubsystem extends SubsystemBase {
             m_leftFlywheelPIDController.setOutputRange(min, max); 
             kMinOutput = min; kMaxOutput = max; 
           }  */
-        //setpoint = SmartDashboard.getNumber("Flywheel Setpoint", MaxRPM);
-        //m_rightFlywheelPIDController.setReference(setpoint, CANSparkMax.ControlType.kVelocity);
-        //m_leftFlywheelPIDController.setReference(setpoint, CANSparkMax.ControlType.kVelocity);
-        m_rightFlywheelSparkMax.set(.5);
-        m_leftFlywheelSparkMax.set(.5);
+        setpoint = SmartDashboard.getNumber("Flywheel Setpoint", MaxRPM);
+        m_rightFlywheelPIDController.setReference(setpoint, CANSparkMax.ControlType.kVelocity);
+        m_leftFlywheelPIDController.setReference(setpoint, CANSparkMax.ControlType.kVelocity);
+        //m_rightFlywheelSparkMax.set(.5);
+        //m_leftFlywheelSparkMax.set(.5);
         flywheelRunning=true;
-      // } else {
-      //     //m_rightFlywheelPIDController.setReference(0, CANSparkMax.ControlType.kVelocity);
-      //     //m_leftFlywheelPIDController.setReference(0, CANSparkMax.ControlType.kVelocity);
-      //   m_rightFlywheelSparkMax.set(0);
-      //   m_leftFlywheelSparkMax.set(0);
-      //   flywheelRunning=false;
       }
-      SmartDashboard.putNumber("Right Flywheel Speed", m_rightFlywheelEncoder.getVelocity());
-      SmartDashboard.putNumber("Left Flywheel Speed", m_leftFlywheelEncoder.getVelocity());
     }
 
     public void FlywheelStop(){
-      //m_rightFlywheelPIDController.setReference(0, CANSparkMax.ControlType.kVelocity);
-      //m_leftFlywheelPIDController.setReference(0, CANSparkMax.ControlType.kVelocity);
-      m_rightFlywheelSparkMax.set(0);
-      m_leftFlywheelSparkMax.set(0);
+      System.out.println("Entering Flywheel Stop");
+      System.out.println("Stopping Flywheel");
+      m_rightFlywheelPIDController.setReference(0, CANSparkMax.ControlType.kVelocity);
+      m_leftFlywheelPIDController.setReference(0, CANSparkMax.ControlType.kVelocity);
+      //m_rightFlywheelSparkMax.set(0);
+      //m_leftFlywheelSparkMax.set(0);
       flywheelRunning=false;
     }
     
     public void FlywheelLaunch(){
-      //m_rightFlywheelPIDController.setReference(setpoint, CANSparkMax.ControlType.kVelocity);
-      //m_leftFlywheelPIDController.setReference(setpoint, CANSparkMax.ControlType.kVelocity);
-      m_rightFlywheelSparkMax.set(.5);
-      m_leftFlywheelSparkMax.set(.5);
+      m_rightFlywheelPIDController.setReference(setpoint, CANSparkMax.ControlType.kVelocity);
+      m_leftFlywheelPIDController.setReference(setpoint, CANSparkMax.ControlType.kVelocity);
+      flywheelRunning=true;
+      //m_rightFlywheelSparkMax.set(.5);
+      //m_leftFlywheelSparkMax.set(.5);
       //CommandScheduler.getInstance()
       // .schedule((new FlywheelCheckCommand(m_robotContainer.flywheelSubsystem))); 
       //new WaitUntilCommand(FlywheelCheckCommand());
     }
 
-    public boolean FlywheelCheckCommand(){
+    public boolean FlywheelCheck(){
       if(Math.abs(setpoint - m_rightFlywheelEncoder.getVelocity()) < 50) {
         if(Math.abs(setpoint - m_leftFlywheelEncoder.getVelocity()) < 50) {
           return true;
@@ -156,14 +156,4 @@ public class FlywheelSubsystem extends SubsystemBase {
       }
       return false;
     }
-
-    // public void FlywheelVariable(int speed) {
-    //     m_rightFlywheelSparkMax.set(speed);
-    //     m_leftFlywheelSparkMax.set(speed);
-    // }
-
-    // public void FlywheelStop() {
-    //     m_rightFlywheelSparkMax.set(0);
-    //     m_leftFlywheelSparkMax.set(0);
-    // }
 }

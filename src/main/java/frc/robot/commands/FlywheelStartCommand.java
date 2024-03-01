@@ -11,16 +11,16 @@ public class FlywheelStartCommand extends Command {
         Launcher = thisLauncherFlywheel;
     }
 
-    public void initialize(){
-        
+    public void initialize() {
+
     }
 
-    public void execute(){
+    public void execute() {
         Launcher.FlywheelStart();
     }
 
-    public boolean isFinished(){
+    public boolean isFinished() {
         return true;
-        
+
     }
 }

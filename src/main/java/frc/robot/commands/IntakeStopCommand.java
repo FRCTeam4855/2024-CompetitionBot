@@ -11,7 +11,7 @@ public class IntakeStopCommand extends Command {
     }
 
     public void initialize() {
-        
+
     }
 
     public void execute() {

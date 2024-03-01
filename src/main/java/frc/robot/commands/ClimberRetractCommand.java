@@ -6,10 +6,12 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class ClimberRetractCommand extends Command {
     private final ClimberSubsystem Climber;
 
-    public ClimberRetractCommand(ClimberSubsystem thisClimber){
-         Climber = thisClimber;
+    public ClimberRetractCommand(ClimberSubsystem thisClimber) {
+        Climber = thisClimber;
     }
-    public void initialize() {}
+
+    public void initialize() {
+    }
 
     public void execute() {
         Climber.ClimberRetract();
@@ -17,5 +19,5 @@ public class ClimberRetractCommand extends Command {
 
     public boolean isFinished() {
         return true;
-      }
+    }
 }

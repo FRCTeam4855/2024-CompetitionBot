@@ -6,10 +6,12 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class ClimberExtendCommand extends Command {
     private final ClimberSubsystem Climber;
 
-    public ClimberExtendCommand(ClimberSubsystem thisClimber){
-         Climber = thisClimber;
+    public ClimberExtendCommand(ClimberSubsystem thisClimber) {
+        Climber = thisClimber;
     }
-    public void initialize() {}
+
+    public void initialize() {
+    }
 
     public void execute() {
         Climber.ClimberExtend();
@@ -17,5 +19,5 @@ public class ClimberExtendCommand extends Command {
 
     public boolean isFinished() {
         return true;
-      }
+    }
 }
