@@ -12,22 +12,13 @@ public class IntakePickupCommand extends Command {
     }
 
     public void initialize() {
-    }
-
-    public void execute() {
         Intake.IntakeInput();
     }
 
+    public void execute() {
+    }
+
     public boolean isFinished() {
-        /*
-         * //if ( !Intake.m_noteSensor.get()) {
-         * if ( Intake.intakeSensor) {
-         * Intake.IntakeStop();
-         * return true;
-         * } else {
-         * return false;
-         * }
-         */
         return true;
     }
 }

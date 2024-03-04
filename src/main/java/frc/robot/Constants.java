@@ -29,15 +29,19 @@ public final class Constants {
   public static final int kLeftDriverControllerPort = 0;  
   public static final int kRightDriverControllerPort = 1;
   public static final double kDriveDeadband = 0.05;
-  public static final int kOperatorControllerPort = 2;
+  public static final int kOperatorControllerPort1 = 2;
+  public static final int kOperatorControllerPort2 = 3;
   public static final int kArmSetpoint1Button_A = 1;
-  public static final int kArmSetpoint2Button_B = 2;
+  public static final int kArmSetpoint2Button_Y = 2;
   public static final int kArmSetpoint3Button_X = 3;
-  public static final int kArmSetpoint4Button_Y = 4;
+  public static final int kArmSetpoint4Unassigned = 4;
+  public static final int kArmSetpoint5Button_B = 5;
+  
+  
   public static final int kFieldOrientedToggle_LB = 5;
   public static final int kGyroReset_Start = 4;
   public static final int kIntakePickup_LB = 5;
-  public static final int kIntakeStop_Back = 7;
+  public static final int kIntakeStop_Back = 9;
   public static final int kIntakeDrop_RB = 6;
   public static final int kFlywheelStart_Start = 8;
 
@@ -45,8 +49,13 @@ public final class Constants {
   public static final double kArmSetpoint2 = 15; // Speaker
   public static final double kArmSetpoint3 = 90; // Amp
   public static final double kArmSetpoint4 = 15; // Transit
-  public static final double kArmSetpoint5 = 90; // Trap
+  public static final double kArmSetpoint5 = 15; // Trap
   public static final double kArmPivotSlop = 0; // acceptable range for arm extension setpoints
+  public static final int DefaultFlywheelRPM = 2500;
+  public static final int DefaultAmpFlywheelRPM = 1500;
+  public static  int kFlywheelAccuracy = 50; // acceptable window for Flywheel speeds
+  public static final int kIntakeCanId = 10;
+  public static final int kClimerCanId = 13;
 
   public enum ArmSetpoint {
     One, Two, Three, Four, Five
@@ -95,7 +104,7 @@ public final class Constants {
     public static final int kFlyWheelTopCanId = 11;
     public static final int kFlyWheelBottomCanId = 12;
 
-    public static final int kIntakeCanId = 13;
+    
 
     public static final boolean kGyroReversed = true;
   }

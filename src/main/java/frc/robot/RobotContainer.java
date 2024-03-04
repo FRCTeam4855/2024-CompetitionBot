@@ -45,7 +45,8 @@ public class RobotContainer {
         Joystick m_leftDriverController = new Joystick(kLeftDriverControllerPort);
         Joystick m_rightDriverController = new Joystick(kRightDriverControllerPort);
         // The Operator Controller
-        XboxController m_operatorController = new XboxController(kOperatorControllerPort);
+        XboxController m_operatorController1 = new XboxController(kOperatorControllerPort1);
+        XboxController m_operatorController2 = new XboxController(kOperatorControllerPort2);
 
         IntakeSubsystem intakeSubsystem;
         FlywheelSubsystem flywheelSubsystem;

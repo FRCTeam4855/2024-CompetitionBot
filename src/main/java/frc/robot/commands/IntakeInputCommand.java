@@ -13,10 +13,10 @@ public class IntakeInputCommand extends Command {
     }
 
     public void initialize() {
+        Intake.IntakeRun();
     }
 
     public void execute() {
-        Intake.IntakeRun();
     }
 
     public boolean isFinished() {

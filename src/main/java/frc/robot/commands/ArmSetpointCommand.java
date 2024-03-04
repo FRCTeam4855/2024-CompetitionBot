@@ -7,14 +7,11 @@ import frc.robot.subsystems.ArmPivot;
 public class ArmSetpointCommand extends Command {
 
     private ArmPivot armPivot;
-    private ArmSetpoint startArmSetpoint;
     private ArmSetpoint goalArmSetpoint;
 
-    public ArmSetpointCommand(ArmPivot armPivot, ArmSetpoint goalArmSetpoint,
-            ArmSetpoint startArmSetpoint) {
+    public ArmSetpointCommand(ArmPivot armPivot, ArmSetpoint goalArmSetpoint) {
 
         this.armPivot = armPivot;
-        this.startArmSetpoint = startArmSetpoint;
         this.goalArmSetpoint = goalArmSetpoint;
         addRequirements(armPivot);
     }
@@ -34,7 +31,7 @@ public class ArmSetpointCommand extends Command {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        if(Math.abs(armPivot.getPivotPosition() - armPivot.pivotSetpoint) < 2)
+        if(Math.abs(armPivot.getPivotPosition() - armPivot.pivotSetpoint) < 1)
         {
             return true;
         } else {

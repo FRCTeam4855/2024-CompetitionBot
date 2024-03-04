@@ -17,6 +17,7 @@ public class IntakeSubsystem extends SubsystemBase {
     // int proximity = noteSensor.getProximity();
     public IntakeSubsystem() {
         m_intakeSparkMax = new CANSparkMax(10, MotorType.kBrushless);
+        //m_intakeSparkMax = new CANSparkMax(10, MotorType.kBrushless);
         // m_intakePIDController = m_intakeSparkMax.getPIDController();
         m_noteSensor = new DigitalInput(0);
     }

@@ -20,10 +20,10 @@ public class FlywheelLaunchCommand extends Command{
     }
 
     public boolean isFinished() {
-        if (Launcher.FlywheelCheck() == true) {
+        //if (Launcher.FlywheelCheck() == true) {
             return true;
-        } else {
-            return false;
-        }
+        //} else {
+        //    return false;
+        //}
     }
 }
