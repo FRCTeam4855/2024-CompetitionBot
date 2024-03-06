@@ -43,11 +43,11 @@ public class FlywheelSubsystem extends SubsystemBase {
         m_leftFlywheelPIDController = m_leftFlywheelSparkMax.getPIDController();
         m_rightFlywheelEncoder = m_rightFlywheelSparkMax.getEncoder();
         m_leftFlywheelEncoder = m_leftFlywheelSparkMax.getEncoder();
-        kP = 0; 
+        kP = 0.0002; 
         kI = 0;
         kD = 0; 
         kIz = 0; 
-        kFF = 0.00017;
+        kFF = 0.000175;
         //kFF = 0; 
         kMaxOutput = 1; 
         kMinOutput = 0;

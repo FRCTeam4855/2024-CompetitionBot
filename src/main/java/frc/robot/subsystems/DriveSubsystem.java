@@ -16,6 +16,8 @@ import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.SerialPort.Port;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -54,6 +56,7 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
+  private final Field2d m_field = new Field2d();
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -70,6 +73,10 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
   }
 
+  public void init() {
+    SmartDashboard.putData("Field", m_field);
+  }
+
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
@@ -81,6 +88,8 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+        m_field.setRobotPose(m_odometry.getPoseMeters());
+        SmartDashboard.putData("Field", m_field);
   }
 
   /**

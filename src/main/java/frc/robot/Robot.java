@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.XboxController;
 
 import frc.robot.Constants.ArmSetpoint;
 import frc.robot.commands.ArmSetpointCommand;
+import frc.robot.commands.ClimberControlCommand;
 import frc.robot.commands.FlywheelLaunchCommand;
 import frc.robot.commands.IntakePickupCommand;
 import frc.robot.commands.IntakeDeliverCommand;
@@ -31,7 +32,9 @@ import frc.robot.subsystems.ArmPivot;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
+import frc.robot.subsystems.ClimberSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -49,7 +52,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   // private DriveSubsystem driveSubsystem;
-  //private FlywheelSubsystem flywheelSubsystem;
+  // private FlywheelSubsystem flywheelSubsystem;
   // private IntakeSubsystem intakeSubsystem;
   /**
    * This function is run when the robot is first started up and should be used
@@ -57,17 +60,19 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   // IntakeSubsystem intakeSubsystem;
-  private static final String kAuton1 = "1. Drive Forward";
-  private static final String kAuton2 = "2. Back, Drop, Forward";
-  // private static final String kAuton3 = "3. B, D, F, B, Balance";
-  // private static final String kAuton4 = "Unused";
-  // private static final String kAuton5 = "ZZZ KKEP UNUSED";
+  private static final String kAuton1 = "1. Leave front speaker";
+  private static final String kAuton2 = "2. Leave Left Side Speaker";
+  private static final String kAuton3 = "3. Leave Right Side Speaker";
+  private static final String kAuton4 = "4. Forwards";
+  private static final String kAuton5 = "5. Launch";
   // private static final String kAuton6 = "balance test";
 
   private String m_autoSelected; // This selects between the two autonomous
   public SendableChooser<String> m_chooser = new SendableChooser<>();
   ArmSetpoint currentSetpoint;
   ArmPivot armPivot = new ArmPivot();
+  ClimberSubsystem ClimberControl = new ClimberSubsystem();
+  private double POVvalue;
 
   @Override
   public void robotInit() {
@@ -111,14 +116,14 @@ public class Robot extends TimedRobot {
     armPivot.initPivot();
     // flywheelSubsystem.FlywheelStop();
 
-    m_chooser.setDefaultOption("1. Drive Backwards", kAuton1);
-    m_chooser.addOption("2. Epic 50 Note auto", kAuton2);
-    // m_chooser.addOption("3. Drop cone on mid, drive and balance on charge
-    // station", kAuton3);
-    // m_chooser.addOption("4. WIP DO NOT USE", kAuton4);
-    // m_chooser.addOption("5. ZZZ KEEP UNUSED", kAuton5);
+    m_chooser.setDefaultOption("1. Leave Front Speaker", kAuton1);
+    m_chooser.addOption("2. Leave Left Side Speaker", kAuton2);
+    m_chooser.addOption("3. Leave Right Side Speaker", kAuton3);
+    m_chooser.addOption("4. Basic go forwards", kAuton4);
+    m_chooser.addOption("5. Launch", kAuton5);
     // m_chooser.addOption("6. balance test", kAuton6);
     // prettyLights1.setLEDs(.01);
+    m_robotContainer.m_robotDrive.init();
 
     SmartDashboard.putData(m_chooser); // displays the auton options in shuffleboard, put in init block
 
@@ -185,14 +190,51 @@ public class Robot extends TimedRobot {
     switch (m_autoSelected) {
 
       case kAuton1:
-        m_autonomousCommand = m_robotContainer.getAutoBackwardsCommand();
+        m_autonomousCommand = m_robotContainer.getFrontSpeakerLeaveCommand();
         CommandScheduler.getInstance()
-            .schedule(m_autonomousCommand);
+            .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
+                .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
+                .andThen(new WaitCommand(1))
+                .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
+                .andThen(new WaitCommand(1))
+                .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.One, currentSetpoint))
+                .andThen(new IntakePickupCommand(m_robotContainer.intakeSubsystem))
+                .andThen(m_autonomousCommand)
+                .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.Six, currentSetpoint))
+                .andThen(new WaitCommand(1))
+                .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem)));
+      default:
+        break;
       case kAuton2:
-        m_autonomousCommand = m_robotContainer.getSquareCommand();
+        m_autonomousCommand = m_robotContainer.getLeftSpeakerLeaveCommand();
         CommandScheduler.getInstance()
-            .schedule(m_autonomousCommand);
-
+            .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
+                .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
+                .andThen(new WaitCommand(.5))
+                .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
+                .andThen(new WaitCommand(1))
+                .andThen(m_autonomousCommand));
+        break;
+      case kAuton3:
+        m_autonomousCommand = m_robotContainer.getRightSpeakerLeaveCommand();
+        CommandScheduler.getInstance()
+            .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
+                .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
+                .andThen(new WaitCommand(.5))
+                .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
+                .andThen(new WaitCommand(1))
+                .andThen(m_autonomousCommand));
+        break;
+      case kAuton4:
+      m_autonomousCommand = m_robotContainer.getGoForwardsCommand();
+      CommandScheduler.getInstance()
+        .schedule(m_autonomousCommand);
+        break;
+      case kAuton5:
+      CommandScheduler.getInstance()
+        .schedule(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem)
+        .andThen(new WaitCommand(.5))
+        .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem)));
     }
   }
 
@@ -208,6 +250,8 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     m_robotContainer.m_robotDrive.m_gyro.reset();
+    m_robotContainer.intakeSubsystem.IntakeStop();
+    m_robotContainer.flywheelSubsystem.FlywheelStop();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -221,89 +265,116 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putBoolean("Proximity",
     // m_robotContainer.intakeSubsystem.m_noteSensor.get());
     SmartDashboard.putBoolean("Proximity", m_robotContainer.intakeSubsystem.intakeSensor);
-    //Driver Controls
-    if (m_robotContainer.m_leftDriverController.getRawButtonPressed(kFieldOrientedToggle_LB)) { //Toggles Field Oriented Mode
+    // Driver Controls
+    if (m_robotContainer.m_leftDriverController.getRawButtonPressed(kFieldOrientedToggle_LB)) { // Toggles Field
+                                                                                                // Oriented Mode
       if (m_robotContainer.fieldOriented == true) {
         m_robotContainer.fieldOriented = false;
       } else {
         m_robotContainer.fieldOriented = true;
       }
     }
-    if (m_robotContainer.m_leftDriverController.getRawButtonPressed(kGyroReset_Start)) { //Resets the Gyro
+    if (m_robotContainer.m_leftDriverController.getRawButtonPressed(kGyroReset_Start)) { // Resets the Gyro
       m_robotContainer.m_robotDrive.m_gyro.reset();
     }
-    //Operator Controls
-    if (m_robotContainer.m_operatorController.getRawButtonPressed(kIntakePickup_LB)) { //Runs the Intake
+    // Operator Controls
+    if (m_robotContainer.m_operatorController1.getRawButtonPressed(kIntakePickup_LB) || m_robotContainer.m_operatorController2.getRawButtonPressed(kIntakePickup_LB)) { // Runs the Intake
       CommandScheduler.getInstance()
           .schedule((new IntakePickupCommand(m_robotContainer.intakeSubsystem)));
     }
 
-    if (m_robotContainer.m_operatorController.getRawButtonPressed(kIntakeStop_Back)) { //Stops the Intake
+    if (m_robotContainer.m_operatorController1.getRawButtonPressed(kIntakeStop_Back) || m_robotContainer.m_operatorController2.getRawButtonPressed(kIntakeStop_Back)) { // Stops the Intake
       CommandScheduler.getInstance()
           .schedule((new IntakeStopCommand(m_robotContainer.intakeSubsystem)));
     }
 
-    if (m_robotContainer.m_operatorController.getRawButtonPressed(kIntakeDrop_RB)) { //Reverses the Intake
+    if (m_robotContainer.m_operatorController1.getRawButtonPressed(kIntakeDrop_RB) || m_robotContainer.m_operatorController2.getRawButtonPressed(kIntakeDrop_RB)) { // Reverses the Intake
       CommandScheduler.getInstance()
           .schedule((new IntakeDropCommand(m_robotContainer.intakeSubsystem)));
     }
 
-    if (m_robotContainer.m_operatorController.getRawButton(kArmSetpoint1Button_A)) { //Sets the Arm to intake position and runs the intake
+    if (m_robotContainer.m_operatorController1.getRawButton(kArmSetpoint1Button_A)) { // Sets the Arm to intake position and runs the intake
       CommandScheduler.getInstance().schedule(
           (new ArmSetpointCommand(armPivot, ArmSetpoint.One, currentSetpoint))
               .andThen(new IntakePickupCommand(m_robotContainer.intakeSubsystem)));
       currentSetpoint = ArmSetpoint.One;
     }
-    if (m_robotContainer.m_operatorController.getRawButton(kArmSetpoint2Button_B)) { //Spear position not in use
+
+    if (m_robotContainer.m_operatorController2.getRawButton(kArmSetpoint1Button_A)) { // Sets the Arm to intake position and runs the intake
+      CommandScheduler.getInstance().schedule(
+          (new ArmSetpointCommand(armPivot, ArmSetpoint.One, currentSetpoint)));
+      currentSetpoint = ArmSetpoint.One;
+    }
+
+    if (m_robotContainer.m_operatorController1.getRawButtonPressed(kArmSetpoint4Button_B) || m_robotContainer.m_operatorController2.getRawButtonPressed(kArmSetpoint4Button_B)) { // Transit Position
       CommandScheduler.getInstance()
-          .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint)));
-      currentSetpoint = ArmSetpoint.Two;
+          .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Four, currentSetpoint)));
+      currentSetpoint = ArmSetpoint.Four;
 
     }
-    if (m_robotContainer.m_operatorController.getRawButton(kArmSetpoint3Button_X)) { //Goes to amp position and runs the flywheel and intake.
+    
+    if (m_robotContainer.m_operatorController1.getRawButton(kArmSetpoint3Button_X)) { // Goes to amp position and runs the flywheel and intake.
       CommandScheduler.getInstance()
           .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Three, currentSetpoint))
-          .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
-          .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem)));
-          //.andThen(new FlywheelStopCommand(m_robotContainer.flywheelSubsystem))
-          //.andThen(new IntakeStopCommand(m_robotContainer.intakeSubsystem)));
-      currentSetpoint = ArmSetpoint.Three;
-
-    }
-    if (m_robotContainer.m_operatorController.getRawButton(kArmSetpoint4Button_Y)) { //Goes to speaker position and runs the flywheel and intake
-      CommandScheduler.getInstance().schedule(
-          (new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
               .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
               .andThen(new WaitCommand(2))
               .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem)));
-              //.andThen(new FlywheelStopCommand(m_robotContainer.flywheelSubsystem))
-              //.andThen(new IntakeStopCommand(m_robotContainer.intakeSubsystem)));
+      // .andThen(new FlywheelStopCommand(m_robotContainer.flywheelSubsystem))
+      // .andThen(new IntakeStopCommand(m_robotContainer.intakeSubsystem)));
+      currentSetpoint = ArmSetpoint.Three;
+    }
+
+    if (m_robotContainer.m_operatorController2.getRawButton(kArmSetpoint3Button_X)) { // Goes to amp position
+      CommandScheduler.getInstance()
+          .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Three, currentSetpoint)));
+      currentSetpoint = ArmSetpoint.Three;
+    }
+
+    if (m_robotContainer.m_operatorController1.getRawButton(kArmSetpoint2Button_Y)) { // Goes to speaker position and runs the flywheel and intake
+      CommandScheduler.getInstance().schedule(
+          (new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
+              .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
+              .andThen(new WaitCommand(.5))
+              .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem)));
+      // .andThen(new FlywheelStopCommand(m_robotContainer.flywheelSubsystem))
+      // .andThen(new IntakeStopCommand(m_robotContainer.intakeSubsystem)));
       currentSetpoint = ArmSetpoint.Four;
     }
-    //if (m_robotContainer.m_operatorController.getLeftTriggerAxis() > .5) { //Controls the flywheel
-     // if(!m_robotContainer.flywheelSubsystem.flywheelRunning) {
-     //   CommandScheduler.getInstance()
-      //    .schedule((new FlywheelStartCommand(m_robotContainer.flywheelSubsystem)));
-      //}
-    //} else {
-      //if(m_robotContainer.flywheelSubsystem.flywheelRunning) {
-       // CommandScheduler.getInstance()
-        //  .schedule((new FlywheelStopCommand(m_robotContainer.flywheelSubsystem)));
-      //}
-    //}
-    if (m_robotContainer.m_operatorController.getRawButtonPressed(kFlywheelStart_Start)) {
+
+    if (m_robotContainer.m_operatorController2.getRawButton(kArmSetpoint2Button_Y)) { // Goes to speaker position
+      CommandScheduler.getInstance().schedule(
+          (new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint)));
+    }  
+      
+    CommandScheduler.getInstance().schedule(
+          (new ClimberControlCommand(ClimberControl, (MathUtil.applyDeadband(m_robotContainer.m_operatorController1.getRawAxis(1), kClimberDeadband)))));
+
+  
+    
+    // if (m_robotContainer.m_operatorController1.getLeftTriggerAxis() > .5) {
+    // //Controls the flywheel
+    // if(!m_robotContainer.flywheelSubsystem.flywheelRunning) {
+    // CommandScheduler.getInstance()
+    // .schedule((new FlywheelStartCommand(m_robotContainer.flywheelSubsystem)));
+    // }
+    // } else {
+    // if(m_robotContainer.flywheelSubsystem.flywheelRunning) {
+    // CommandScheduler.getInstance()
+    // .schedule((new FlywheelStopCommand(m_robotContainer.flywheelSubsystem)));
+    // }
+    // }
+    if (m_robotContainer.m_operatorController1.getRawButtonPressed(kFlywheelStart_Start)) {
       SmartDashboard.putBoolean("flywheelRunning", m_robotContainer.flywheelSubsystem.flywheelRunning);
-      if(!m_robotContainer.flywheelSubsystem.flywheelRunning) 
-      {
+      if (!m_robotContainer.flywheelSubsystem.flywheelRunning) {
         CommandScheduler.getInstance()
-          .schedule((new FlywheelStartCommand(m_robotContainer.flywheelSubsystem)));
-          
+            .schedule((new FlywheelStartCommand(m_robotContainer.flywheelSubsystem)));
+
       } else {
         CommandScheduler.getInstance()
-        .schedule((new FlywheelStopCommand(m_robotContainer.flywheelSubsystem)));
+            .schedule((new FlywheelStopCommand(m_robotContainer.flywheelSubsystem)));
       }
     }
-    if (m_robotContainer.m_operatorController.getRightTriggerAxis() > .5) { //Runs the intake
+    if (m_robotContainer.m_operatorController1.getRightTriggerAxis() > .5) { // Runs the intake
       m_robotContainer.intakeSubsystem.m_intakeSparkMax.set(.5);
       // CommandScheduler.getInstance()
       // .schedule((new FlywheelStartCommand(m_robotContainer.flywheelSubsystem)));
@@ -311,6 +382,9 @@ public class Robot extends TimedRobot {
       // } else {
       // flywheelSubsystem.flywheelRunning = false;
     }
+
+    //POVvalue = m_robotContainer.m_operatorController1.getPOV();
+    //SmartDashboard.putNumber("POV value", POVvalue);
   }
 
   @Override

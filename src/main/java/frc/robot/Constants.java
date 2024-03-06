@@ -31,25 +31,28 @@ public final class Constants {
   public static final double kDriveDeadband = 0.05;
   public static final int kOperatorControllerPort = 2;
   public static final int kArmSetpoint1Button_A = 1;
-  public static final int kArmSetpoint2Button_B = 2;
+  public static final int kArmSetpoint4Button_B = 2;
   public static final int kArmSetpoint3Button_X = 3;
-  public static final int kArmSetpoint4Button_Y = 4;
+  public static final int kArmSetpoint2Button_Y = 4;
   public static final int kFieldOrientedToggle_LB = 5;
   public static final int kGyroReset_Start = 4;
   public static final int kIntakePickup_LB = 5;
   public static final int kIntakeStop_Back = 7;
   public static final int kIntakeDrop_RB = 6;
   public static final int kFlywheelStart_Start = 8;
+   public static final double kClimberDeadband = 0.2;
+  
 
   public static final double kArmSetpoint1 = .05; // Intake
   public static final double kArmSetpoint2 = 15; // Speaker
-  public static final double kArmSetpoint3 = 90; // Amp
+  public static final double kArmSetpoint3 = 100; // Amp
   public static final double kArmSetpoint4 = 15; // Transit
   public static final double kArmSetpoint5 = 90; // Trap
+  public static final double kArmSetpoint6 = 27;
   public static final double kArmPivotSlop = 0; // acceptable range for arm extension setpoints
 
   public enum ArmSetpoint {
-    One, Two, Three, Four, Five
+    One, Two, Three, Four, Five, Six
   }
 
   public static final class DriveConstants {
@@ -58,7 +61,7 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
-    public static final double kDirectionSlewRate = 5; // radians per second
+    public static final double kDirectionSlewRate = 2.0; // radians per second
     public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
     public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
     // Chassis configuration
@@ -95,7 +98,7 @@ public final class Constants {
     public static final int kFlyWheelTopCanId = 11;
     public static final int kFlyWheelBottomCanId = 12;
 
-    public static final int kIntakeCanId = 13;
+    public static final int kIntakeCanId = 10;
 
     public static final boolean kGyroReversed = true;
   }
@@ -114,7 +117,7 @@ public final class Constants {
     public static final boolean kTurningEncoderInverted = false;
     // Calculations required for driving motor conversion factors and feed forward
     public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60;
-    public static final double kWheelDiameterMeters = 0.1016;
+    public static final double kWheelDiameterMeters = 0.0889;
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
     // teeth on the bevel pinion
