@@ -47,7 +47,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The gyro sensor
   // private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
-  public AHRS m_gyro = new AHRS(Port.kUSB1);
+  public AHRS m_gyro = new AHRS();
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
@@ -56,7 +56,7 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
-  private final Field2d m_field = new Field2d();
+  // private final Field2d m_field = new Field2d();
 
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -74,7 +74,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void init() {
-    SmartDashboard.putData("Field", m_field);
+    // SmartDashboard.putData("Field", m_field);
   }
 
   @Override
@@ -88,8 +88,8 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-        m_field.setRobotPose(m_odometry.getPoseMeters());
-        SmartDashboard.putData("Field", m_field);
+        // m_field.setRobotPose(m_odometry.getPoseMeters());
+        // SmartDashboard.putData("Field", m_field);
   }
 
   /**
