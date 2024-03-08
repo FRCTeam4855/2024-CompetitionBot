@@ -35,6 +35,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
 import frc.robot.subsystems.ClimberSubsystem;
+import edu.wpi.first.cameraserver.CameraServer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -126,6 +127,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.m_robotDrive.init();
 
     SmartDashboard.putData(m_chooser); // displays the auton options in shuffleboard, put in init block
+    CameraServer.startAutomaticCapture();
 
   }
 
@@ -347,7 +349,7 @@ public class Robot extends TimedRobot {
     }  
       
     CommandScheduler.getInstance().schedule(
-          (new ClimberControlCommand(ClimberControl, (MathUtil.applyDeadband(m_robotContainer.m_operatorController1.getRawAxis(1), kClimberDeadband)))));
+          (new ClimberControlCommand(ClimberControl, Math.abs(MathUtil.applyDeadband(m_robotContainer.m_operatorController1.getRawAxis(1), kClimberDeadband)))));
 
   
     
