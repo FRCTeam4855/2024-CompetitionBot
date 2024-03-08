@@ -78,13 +78,13 @@ public class ArmPivot extends SubsystemBase {
     pivotPIDController.setPositionPIDWrappingMaxInput(360);
     m_armPivot.setSmartCurrentLimit(30);
 
-    SmartDashboard.putNumber("kG", kG);
-    SmartDashboard.putNumber("kV", kV);
-    SmartDashboard.putNumber("FFvalue", 0);
-    SmartDashboard.putNumber("kP", kP);
-    SmartDashboard.putNumber("kI", kI);
-    SmartDashboard.putNumber("kD", kD);
-    SmartDashboard.putNumber("FFvalue", feedforward.calculate(Math.toRadians(8.2), Math.toRadians(1)));
+    // SmartDashboard.putNumber("kG", kG);
+    // SmartDashboard.putNumber("kV", kV);
+    // SmartDashboard.putNumber("FFvalue", 0);
+    // SmartDashboard.putNumber("kP", kP);
+    // SmartDashboard.putNumber("kI", kI);
+    // SmartDashboard.putNumber("kD", kD);
+    // SmartDashboard.putNumber("FFvalue", feedforward.calculate(Math.toRadians(8.2), Math.toRadians(1)));
   }
 
   public void setPivotSetpoint(ArmSetpoint armSetpoint) {

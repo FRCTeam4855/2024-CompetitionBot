@@ -23,9 +23,10 @@ import frc.robot.commands.ArmSetpointCommand;
 import frc.robot.commands.ClimberControlCommand;
 import frc.robot.commands.FlywheelLaunchCommand;
 import frc.robot.commands.IntakePickupCommand;
+import frc.robot.commands.IntakeStopCommand;
 import frc.robot.commands.IntakeDeliverCommand;
 import frc.robot.commands.IntakeDropCommand;
-import frc.robot.commands.IntakeStopCommand;
+import frc.robot.commands.IntakeInputCommand;
 import frc.robot.commands.FlywheelStartCommand;
 import frc.robot.commands.FlywheelStopCommand;
 import frc.robot.subsystems.ArmPivot;
@@ -65,7 +66,7 @@ public class Robot extends TimedRobot {
   private static final String kAuton2 = "2. Leave Left Side Speaker";
   private static final String kAuton3 = "3. Leave Right Side Speaker";
   private static final String kAuton4 = "4. Forwards";
-  private static final String kAuton5 = "5. Launch";
+  private static final String kAuton5 = "5. Launch Only";
   // private static final String kAuton6 = "balance test";
 
   private String m_autoSelected; // This selects between the two autonomous
@@ -121,7 +122,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("2. Leave Left Side Speaker", kAuton2);
     m_chooser.addOption("3. Leave Right Side Speaker", kAuton3);
     m_chooser.addOption("4. Basic go forwards", kAuton4);
-    m_chooser.addOption("5. Launch", kAuton5);
+    m_chooser.addOption("5. Launch Only", kAuton5);
     // m_chooser.addOption("6. balance test", kAuton6);
     // prettyLights1.setLEDs(.01);
     m_robotContainer.m_robotDrive.init();
@@ -200,7 +201,7 @@ public class Robot extends TimedRobot {
                 .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
                 .andThen(new WaitCommand(1))
                 .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.One, currentSetpoint))
-                .andThen(new IntakePickupCommand(m_robotContainer.intakeSubsystem))
+                .andThen(new IntakeInputCommand(m_robotContainer.intakeSubsystem))
                 .andThen(m_autonomousCommand)
                 .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.Six, currentSetpoint))
                 .andThen(new WaitCommand(1))
@@ -237,6 +238,8 @@ public class Robot extends TimedRobot {
         .schedule(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem)
         .andThen(new WaitCommand(.5))
         .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem)));
+
+        
     }
   }
 
@@ -298,11 +301,12 @@ public class Robot extends TimedRobot {
     if (m_robotContainer.m_operatorController1.getRawButton(kArmSetpoint1Button_A)) { // Sets the Arm to intake position and runs the intake
       CommandScheduler.getInstance().schedule(
           (new ArmSetpointCommand(armPivot, ArmSetpoint.One, currentSetpoint))
-              .andThen(new IntakePickupCommand(m_robotContainer.intakeSubsystem)));
+              .andThen(new IntakePickupCommand(m_robotContainer.intakeSubsystem))
+              .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.Four, currentSetpoint)));
       currentSetpoint = ArmSetpoint.One;
     }
 
-    if (m_robotContainer.m_operatorController2.getRawButton(kArmSetpoint1Button_A)) { // Sets the Arm to intake position and runs the intake
+    if (m_robotContainer.m_operatorController2.getRawButton(kArmSetpoint1Button_A)) { // Sets the Arm to intake position
       CommandScheduler.getInstance().schedule(
           (new ArmSetpointCommand(armPivot, ArmSetpoint.One, currentSetpoint)));
       currentSetpoint = ArmSetpoint.One;
@@ -317,10 +321,13 @@ public class Robot extends TimedRobot {
     
     if (m_robotContainer.m_operatorController1.getRawButton(kArmSetpoint3Button_X)) { // Goes to amp position and runs the flywheel and intake.
       CommandScheduler.getInstance()
-          .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Three, currentSetpoint))
+          .schedule(new ArmSetpointCommand(armPivot, ArmSetpoint.Three, currentSetpoint)
               .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
-              .andThen(new WaitCommand(2))
-              .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem)));
+              .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
+              .andThen(new IntakeStopCommand(m_robotContainer.intakeSubsystem))
+              .andThen(new FlywheelStopCommand(m_robotContainer.flywheelSubsystem))
+              .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.Four, currentSetpoint)));
+              
       // .andThen(new FlywheelStopCommand(m_robotContainer.flywheelSubsystem))
       // .andThen(new IntakeStopCommand(m_robotContainer.intakeSubsystem)));
       currentSetpoint = ArmSetpoint.Three;
@@ -336,8 +343,11 @@ public class Robot extends TimedRobot {
       CommandScheduler.getInstance().schedule(
           (new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
               .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
-              .andThen(new WaitCommand(.5))
-              .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem)));
+              .andThen(new WaitCommand(1))
+              .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
+              .andThen(new FlywheelStopCommand(m_robotContainer.flywheelSubsystem))
+              .andThen(new IntakeStopCommand(m_robotContainer.intakeSubsystem))
+              .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.Four, currentSetpoint)));
       // .andThen(new FlywheelStopCommand(m_robotContainer.flywheelSubsystem))
       // .andThen(new IntakeStopCommand(m_robotContainer.intakeSubsystem)));
       currentSetpoint = ArmSetpoint.Four;

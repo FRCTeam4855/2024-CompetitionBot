@@ -13,14 +13,17 @@ public class IntakeDeliverCommand extends Command {
     }
 
     public void initialize() {
+        Intake.IntakeDeliver();
     }
 
     public void execute() {
-        Intake.IntakeDeliver();
+
     }
 
     public boolean isFinished() {
         if(!Intake.intakeSensor) {
+            Intake.IntakeStop();
+            Intake.IntakeRun();
             return true;
         } else {
             return false;

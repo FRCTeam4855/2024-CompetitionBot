@@ -49,7 +49,7 @@ public final class Constants {
   public static final double kArmSetpoint3 = 100; // Amp
   public static final double kArmSetpoint4 = 15; // Transit
   public static final double kArmSetpoint5 = 90; // Trap
-  public static final double kArmSetpoint6 = 27;
+  public static final double kArmSetpoint6 = 30;
   public static final double kArmPivotSlop = 0; // acceptable range for arm extension setpoints
 
   public enum ArmSetpoint {

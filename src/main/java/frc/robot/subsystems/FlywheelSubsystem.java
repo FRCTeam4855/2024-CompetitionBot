@@ -75,21 +75,21 @@ public class FlywheelSubsystem extends SubsystemBase {
         //m_leftFlywheelSparkMax.set(0);
         flywheelRunning=false;
 
-        SmartDashboard.putNumber("R P Gain", R_kP);
-        SmartDashboard.putNumber("R I Gain", R_kI);
-        SmartDashboard.putNumber("R D Gain", R_kD);
-        SmartDashboard.putNumber("R I Zone", R_kIz);
-        SmartDashboard.putNumber("R Feed Forward", R_kFF);
-        SmartDashboard.putNumber("L P Gain", L_kP);
-        SmartDashboard.putNumber("L I Gain", L_kI);
-        SmartDashboard.putNumber("L D Gain", L_kD);
-        SmartDashboard.putNumber("L I Zone", L_kIz);
-        SmartDashboard.putNumber("L Feed Forward", L_kFF);
-        SmartDashboard.putNumber("Max Output", kMaxOutput);
-        SmartDashboard.putNumber("Min Output", kMinOutput);
-        SmartDashboard.putNumber("Right Flywheel Speed", m_rightFlywheelEncoder.getVelocity());
-        SmartDashboard.putNumber("Left Flywheel Speed", m_leftFlywheelEncoder.getVelocity());
-        SmartDashboard.putNumber("Flywheel Setpoint", MaxRPM);
+        // SmartDashboard.putNumber("R P Gain", R_kP);
+        // SmartDashboard.putNumber("R I Gain", R_kI);
+        // SmartDashboard.putNumber("R D Gain", R_kD);
+        // SmartDashboard.putNumber("R I Zone", R_kIz);
+        // SmartDashboard.putNumber("R Feed Forward", R_kFF);
+        // SmartDashboard.putNumber("L P Gain", L_kP);
+        // SmartDashboard.putNumber("L I Gain", L_kI);
+        // SmartDashboard.putNumber("L D Gain", L_kD);
+        // SmartDashboard.putNumber("L I Zone", L_kIz);
+        // SmartDashboard.putNumber("L Feed Forward", L_kFF);
+        // SmartDashboard.putNumber("Max Output", kMaxOutput);
+        // SmartDashboard.putNumber("Min Output", kMinOutput);
+        // SmartDashboard.putNumber("Right Flywheel Speed", m_rightFlywheelEncoder.getVelocity());
+        // SmartDashboard.putNumber("Left Flywheel Speed", m_leftFlywheelEncoder.getVelocity());
+        // SmartDashboard.putNumber("Flywheel Setpoint", MaxRPM);
     }
 
     @Override
@@ -101,33 +101,33 @@ public class FlywheelSubsystem extends SubsystemBase {
     public void FlywheelStart(){
       System.out.println("Entering FlywheelStart");
       if(!flywheelRunning) {
-        System.out.println("Starting Flywheel");
-        double rp = SmartDashboard.getNumber("R P Gain", 0);
-        double ri = SmartDashboard.getNumber("R I Gain", 0);
-        double rd = SmartDashboard.getNumber("R D Gain", 0);
-        double riz = SmartDashboard.getNumber("R I Zone", 0);
-        double rff = SmartDashboard.getNumber("R Feed Forward", 0);
-        double lp = SmartDashboard.getNumber("L P Gain", 0);
-        double li = SmartDashboard.getNumber("L I Gain", 0);
-        double ld = SmartDashboard.getNumber("L D Gain", 0);
-        double liz = SmartDashboard.getNumber("L I Zone", 0);
-        double lff = SmartDashboard.getNumber("L Feed Forward", 0);
-        double max = SmartDashboard.getNumber("Max Output", 0);
-        double min = SmartDashboard.getNumber("Min Output", 0);
-        if((rp != R_kP)) { m_rightFlywheelPIDController.setP(rp); R_kP = rp; }
-        if((ri != R_kI)) { m_rightFlywheelPIDController.setI(ri); R_kI = ri; }
-        if((rd != R_kD)) { m_rightFlywheelPIDController.setD(rd); R_kD = rd; }
-        if((riz != R_kIz)) { m_rightFlywheelPIDController.setIZone(riz); R_kIz = riz; }
-        if((rff != R_kFF)) { m_rightFlywheelPIDController.setFF(rff); R_kFF = rff; }
-        if((lp != L_kP)) { m_rightFlywheelPIDController.setP(lp); L_kP = lp; }
-        if((li != L_kI)) { m_rightFlywheelPIDController.setI(li); L_kI = li; }
-        if((ld != L_kD)) { m_rightFlywheelPIDController.setD(ld); L_kD = ld; }
-        if((liz != L_kIz)) { m_rightFlywheelPIDController.setIZone(liz); L_kIz = riz; }
-        if((lff != L_kFF)) { m_rightFlywheelPIDController.setFF(lff); L_kFF = rff; }
-        if((max != kMaxOutput) || (min != kMinOutput)) { 
-          m_rightFlywheelPIDController.setOutputRange(min, max);
-          m_leftFlywheelPIDController.setOutputRange(min, max); 
-          kMinOutput = min; kMaxOutput = max; 
+        // System.out.println("Starting Flywheel");
+        // double rp = SmartDashboard.getNumber("R P Gain", 0);
+        // double ri = SmartDashboard.getNumber("R I Gain", 0);
+        // double rd = SmartDashboard.getNumber("R D Gain", 0);
+        // double riz = SmartDashboard.getNumber("R I Zone", 0);
+        // double rff = SmartDashboard.getNumber("R Feed Forward", 0);
+        // double lp = SmartDashboard.getNumber("L P Gain", 0);
+        // double li = SmartDashboard.getNumber("L I Gain", 0);
+        // double ld = SmartDashboard.getNumber("L D Gain", 0);
+        // double liz = SmartDashboard.getNumber("L I Zone", 0);
+        // double lff = SmartDashboard.getNumber("L Feed Forward", 0);
+        // double max = SmartDashboard.getNumber("Max Output", 0);
+        // double min = SmartDashboard.getNumber("Min Output", 0);
+        // if((rp != R_kP)) { m_rightFlywheelPIDController.setP(rp); R_kP = rp; }
+        // if((ri != R_kI)) { m_rightFlywheelPIDController.setI(ri); R_kI = ri; }
+        // if((rd != R_kD)) { m_rightFlywheelPIDController.setD(rd); R_kD = rd; }
+        // if((riz != R_kIz)) { m_rightFlywheelPIDController.setIZone(riz); R_kIz = riz; }
+        // if((rff != R_kFF)) { m_rightFlywheelPIDController.setFF(rff); R_kFF = rff; }
+        // if((lp != L_kP)) { m_rightFlywheelPIDController.setP(lp); L_kP = lp; }
+        // if((li != L_kI)) { m_rightFlywheelPIDController.setI(li); L_kI = li; }
+        // if((ld != L_kD)) { m_rightFlywheelPIDController.setD(ld); L_kD = ld; }
+        // if((liz != L_kIz)) { m_rightFlywheelPIDController.setIZone(liz); L_kIz = riz; }
+        // if((lff != L_kFF)) { m_rightFlywheelPIDController.setFF(lff); L_kFF = rff; }
+        // if((max != kMaxOutput) || (min != kMinOutput)) { 
+        //   m_rightFlywheelPIDController.setOutputRange(min, max);
+        //   m_leftFlywheelPIDController.setOutputRange(min, max); 
+        //   kMinOutput = min; kMaxOutput = max; 
         }
           /*if((p != kP)) { m_leftFlywheelPIDController.setP(p); kP = p; }
           if((i != kI)) { m_leftFlywheelPIDController.setI(i); kI = i; }
@@ -145,7 +145,7 @@ public class FlywheelSubsystem extends SubsystemBase {
         //m_leftFlywheelSparkMax.set(.5);
         flywheelRunning=true;
       }
-    }
+    
 
     public void FlywheelStop(){
       System.out.println("Entering Flywheel Stop");

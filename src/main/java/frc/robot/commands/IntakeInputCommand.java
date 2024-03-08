@@ -13,23 +13,16 @@ public class IntakeInputCommand extends Command {
     }
 
     public void initialize() {
-    }
-
-    public void execute() {
+        Intake.IntakeInput();
         Intake.IntakeRun();
     }
 
-    public boolean isFinished() {
-        /*
-         * //if ( !Intake.m_noteSensor.get() || Intake.IntakeSpeed <= 0) {
-         * if ( Intake.intakeSensor || Intake.IntakeSpeed <= 0) {
-         * Intake.IntakeStop();
-         * Intake.IntakeRun();
-         * return true;
-         * } else {
-         * return false;
-         * }
-         */
-        return true;
+    public void execute() {
+
     }
-}
+
+    public boolean isFinished() {
+
+            return true;
+        }
+    }
