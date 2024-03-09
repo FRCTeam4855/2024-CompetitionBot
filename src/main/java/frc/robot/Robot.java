@@ -129,7 +129,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData(m_chooser); // displays the auton options in shuffleboard, put in init block
     CameraServer.startAutomaticCapture();
-
+    CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -225,7 +225,9 @@ public class Robot extends TimedRobot {
                 .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
                 .andThen(new WaitCommand(.5))
                 .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
-                .andThen(new WaitCommand(1))
+                .andThen(new WaitCommand(.5))
+                .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.Five, currentSetpoint))
+                .andThen(new WaitCommand(.5))
                 .andThen(m_autonomousCommand));
         break;
       case kAuton4:
@@ -235,7 +237,8 @@ public class Robot extends TimedRobot {
         break;
       case kAuton5:
       CommandScheduler.getInstance()
-        .schedule(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem)
+        .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
+        .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
         .andThen(new WaitCommand(.5))
         .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem)));
 
@@ -282,6 +285,11 @@ public class Robot extends TimedRobot {
     if (m_robotContainer.m_leftDriverController.getRawButtonPressed(kGyroReset_Start)) { // Resets the Gyro
       m_robotContainer.m_robotDrive.m_gyro.reset();
     }
+    if (m_robotContainer.m_leftDriverController.getRawButton(kPrecisionDriving_Trigger)) {
+      m_robotContainer.speedMultiplier = kSpeedMultiplierPrecise;
+    } else {
+      m_robotContainer.speedMultiplier = kSpeedMultiplierDefault;
+    }
     // Operator Controls
     if (m_robotContainer.m_operatorController1.getRawButtonPressed(kIntakePickup_LB) || m_robotContainer.m_operatorController2.getRawButtonPressed(kIntakePickup_LB)) { // Runs the Intake
       CommandScheduler.getInstance()
@@ -317,6 +325,11 @@ public class Robot extends TimedRobot {
           .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Four, currentSetpoint)));
       currentSetpoint = ArmSetpoint.Four;
 
+    }
+    if (m_robotContainer.m_operatorController1.getPOV() == 0) { // Defense setpoint
+      CommandScheduler.getInstance()
+          .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Five, currentSetpoint)));
+      currentSetpoint = ArmSetpoint.Five;
     }
     
     if (m_robotContainer.m_operatorController1.getRawButton(kArmSetpoint3Button_X)) { // Goes to amp position and runs the flywheel and intake.

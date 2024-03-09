@@ -21,9 +21,9 @@ import com.revrobotics.SparkPIDController.ArbFFUnits;
 public class ArmPivot extends SubsystemBase {
   public double pivotSetpoint;
   CANSparkMax m_armPivot = new CANSparkMax(9, MotorType.kBrushless);
-  SparkPIDController pivotPIDController = m_armPivot.getPIDController();
+  public SparkPIDController pivotPIDController = m_armPivot.getPIDController();
   SparkAbsoluteEncoder m_pivotEncoder = m_armPivot.getAbsoluteEncoder(Type.kDutyCycle);
-
+  
   double kS = 0.12;
   double kG = 0.495;
   double kV = 0;
