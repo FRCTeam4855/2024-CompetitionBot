@@ -273,7 +273,9 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putBoolean("Proximity",
     // m_robotContainer.intakeSubsystem.m_noteSensor.get());
     SmartDashboard.putBoolean("Proximity", m_robotContainer.intakeSubsystem.intakeSensor);
+   
     // Driver Controls
+
     if (m_robotContainer.m_leftDriverController.getRawButtonPressed(kFieldOrientedToggle_LB)) { // Toggles Field
                                                                                                 // Oriented Mode
       if (m_robotContainer.fieldOriented == true) {
@@ -285,12 +287,22 @@ public class Robot extends TimedRobot {
     if (m_robotContainer.m_leftDriverController.getRawButtonPressed(kGyroReset_Start)) { // Resets the Gyro
       m_robotContainer.m_robotDrive.m_gyro.reset();
     }
-    if (m_robotContainer.m_leftDriverController.getRawButton(kPrecisionDriving_Trigger)) {
+
+    if (m_robotContainer.m_leftDriverController.getRawButton(kPrecisionDriving_Trigger)) { //Precise driving mode
       m_robotContainer.speedMultiplier = kSpeedMultiplierPrecise;
     } else {
       m_robotContainer.speedMultiplier = kSpeedMultiplierDefault;
     }
-    // Operator Controls
+
+    if (m_robotContainer.m_rightDriverController.getRawButton(kPrecisionDriving_Trigger)) {  //Driver's right trigger lowers arm to go under stage
+      CommandScheduler.getInstance()
+        .schedule(new ArmSetpointCommand(armPivot, ArmSetpoint.Seven, currentSetpoint));
+    }
+        if (m_robotContainer.m_rightDriverController.getRawButtonReleased(kPrecisionDriving_Trigger)){ //returns the arm to transit
+      CommandScheduler.getInstance()
+      .schedule(new ArmSetpointCommand(armPivot, ArmSetpoint.Four, currentSetpoint));
+    }
+
     if (m_robotContainer.m_operatorController1.getRawButtonPressed(kIntakePickup_LB) || m_robotContainer.m_operatorController2.getRawButtonPressed(kIntakePickup_LB)) { // Runs the Intake
       CommandScheduler.getInstance()
           .schedule((new IntakePickupCommand(m_robotContainer.intakeSubsystem)));

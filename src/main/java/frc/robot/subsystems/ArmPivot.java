@@ -100,6 +100,8 @@ public class ArmPivot extends SubsystemBase {
       pivotSetpoint = kArmSetpoint5;
     if (armSetpoint == ArmSetpoint.Six)
       pivotSetpoint = kArmSetpoint6;
+    if (armSetpoint == ArmSetpoint.Seven)
+      pivotSetpoint = kArmSetpoint7;
   }
 
   public double getPivotSetpointPosition() {

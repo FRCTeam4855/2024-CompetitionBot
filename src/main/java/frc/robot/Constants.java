@@ -30,6 +30,7 @@ public final class Constants {
   public static final int kRightDriverControllerPort = 1;
   public static final double kDriveDeadband = 0.05;
   public static final int kPrecisionDriving_Trigger = 1;
+  public static final int kDriverArmOverride_Trigger = 1;
   public static final int kOperatorControllerPort1 = 2;
   public static final int kOperatorControllerPort2 = 3;
   public static final int kArmSetpoint1Button_A = 1;
@@ -48,15 +49,17 @@ public final class Constants {
   public static final double kArmSetpoint1 = .05; // Intake
   public static final double kArmSetpoint2 = 15; // Speaker
   public static final double kArmSetpoint3 = 100; // Amp
-  public static final double kArmSetpoint4 = 15; // Transit
+  //public static final double kArmSetpoint4 = 15; // Transit
+  public static final double kArmSetpoint4 = 55; // Transit
   public static final double kArmSetpoint5 = 75; // D-D-D-Defense
-  public static final double kArmSetpoint6 = 30; // Long shot
+  public static final double kArmSetpoint6 = 30.5; // Long shot
+  public static final double kArmSetpoint7 = 15; // Under Stage
   public static final double kArmPivotSlop = 0; // acceptable range for arm extension setpoints
   public static final double kSpeedMultiplierDefault = 1;   // the default speed when no accessory buttons are held down
   public static final double kSpeedMultiplierPrecise = 0.5; // the speed when the trigger is held down for precise movements
 
   public enum ArmSetpoint {
-    One, Two, Three, Four, Five, Six
+    One, Two, Three, Four, Five, Six, Seven
   }
 
   public static final class DriveConstants {
