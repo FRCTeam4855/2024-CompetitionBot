@@ -63,7 +63,6 @@ public class Limelight extends SubsystemBase {
     NetworkTableEntry pipeline = table.getEntry("pipeline");
     pipeline.setNumber(1);
   }
-
  
 
   public void updateDashboard() {
@@ -73,6 +72,7 @@ public class Limelight extends SubsystemBase {
     // get a reference to the subtable called "datatable"
     NetworkTable table = inst.getTable("limelight-rams");
     // NetworkTableEntry TeamEntry = table.getEntry("tx");
+    
     NetworkTableEntry xEntry = table.getEntry("tx"); //Horizontal Offset From Crosshair To Target (LL1: -27 degrees to 27 degrees | LL2: -29.8 to 29.8 degrees)
     NetworkTableEntry yEntry = table.getEntry("ty"); //Vertical Offset From Crosshair To Target (LL1: -20.5 degrees to 20.5 degrees | LL2: -24.85 to 24.85 degrees)
     NetworkTableEntry aEntry = table.getEntry("ta"); //Target Area (0% of image to 100% of image)
@@ -115,7 +115,6 @@ public class Limelight extends SubsystemBase {
     SmartDashboard.putBoolean("Limelight Has Target", doesLimelightHaveTarget());
     SmartDashboard.putBoolean("Limelight in AprilTag Mode", isLimelightOnAprilTagMode());
   }
-
 
 
   public class doesLimelightHaveTarget {

@@ -33,6 +33,7 @@ import frc.robot.subsystems.ArmPivot;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Limelight;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -63,11 +64,11 @@ public class Robot extends TimedRobot {
    */
   // IntakeSubsystem intakeSubsystem;
   private static final String kAuton1 = "1. Leave front speaker";
-  private static final String kAuton2 = "2. Leave Left Side Speaker";
-  private static final String kAuton3 = "3. Leave Right Side Speaker";
-  private static final String kAuton4 = "4. Forwards";
+  private static final String kAuton2 = "2. Leave Blue Amp Side Speaker";
+  private static final String kAuton3 = "3. Leave Red Amp Side Speaker";
+  private static final String kAuton4 = "4. Leave Source Side Speaker";
   private static final String kAuton5 = "5. Launch Only";
-  // private static final String kAuton6 = "balance test";
+  private static final String kAuton6 = "6. Forward";
 
   private String m_autoSelected; // This selects between the two autonomous
   public SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -75,6 +76,8 @@ public class Robot extends TimedRobot {
   ArmPivot armPivot = new ArmPivot();
   ClimberSubsystem ClimberControl = new ClimberSubsystem();
   private double POVvalue;
+  private double limelightX;
+  Limelight m_limelightSubsystem;
 
   @Override
   public void robotInit() {
@@ -116,14 +119,15 @@ public class Robot extends TimedRobot {
 
     m_robotContainer.intakeSubsystem.IntakeStop();
     armPivot.initPivot();
+    m_limelightSubsystem = new Limelight();
     // flywheelSubsystem.FlywheelStop();
 
     m_chooser.setDefaultOption("1. Leave Front Speaker", kAuton1);
-    m_chooser.addOption("2. Leave Left Side Speaker", kAuton2);
-    m_chooser.addOption("3. Leave Right Side Speaker", kAuton3);
-    m_chooser.addOption("4. Basic go forwards", kAuton4);
-    m_chooser.addOption("5. Launch Only", kAuton5);
-    // m_chooser.addOption("6. balance test", kAuton6);
+    m_chooser.addOption("2. Leave Blue Amp Side Speaker", kAuton2);
+    m_chooser.addOption("3. Leave Red Amp Side Speaker", kAuton3);
+    m_chooser.addOption("4. Leave Source Side Speaker", kAuton4);
+    m_chooser.addOption("5. Forward Only", kAuton5);
+    m_chooser.addOption("6. Launch Only", kAuton6);
     // prettyLights1.setLEDs(.01);
     m_robotContainer.m_robotDrive.init();
 
@@ -132,28 +136,11 @@ public class Robot extends TimedRobot {
     CameraServer.startAutomaticCapture();
   }
 
-  /**
-   * This function is called every 20 ms, no matter the mode. Use this for items
-   * like diagnostics
-   * that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>
-   * This runs after the mode specific periodic functions, but before LiveWindow
-   * and
-   * SmartDashboard integrated updating.
-   */
   @Override
   public void robotPeriodic() {
     SmartDashboard.putNumber("ArmEncoder", armPivot.getPivotPosition());
     // SmartDashboard.putNumber("Proximity", Intake.noteSensor.getProximity());
 
-    // Runs the Scheduler. This is responsible for polling buttons, adding
-    // newly-scheduled
-    // commands, running already-scheduled commands, removing finished or
-    // interrupted commands,
-    // and running subsystem periodic() methods. This must be called from the
-    // robot's periodic
-    // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     SmartDashboard.putNumber("GyroYaw", m_robotContainer.m_robotDrive.m_gyro.getYaw());
     SmartDashboard.putNumber("GyroAngle", m_robotContainer.m_robotDrive.m_gyro.getAngle());
@@ -164,9 +151,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("FlywheelRunning?", m_robotContainer.flywheelSubsystem.runFlywheel);
     // SmartDashboard.putNumber("Flywheel Setpoint", flywheelSubsystem.setpoint);
     // flywheelSubsystem.periodicFlywheel();
+    limelightX = m_limelightSubsystem.tx;
   }
 
-  /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
   }
@@ -180,10 +167,7 @@ public class Robot extends TimedRobot {
 
   }
 
-  /**
-   * This autonomous runs the autonomous command selected by your
-   * {@link RobotContainer} class.
-   */
+
   @Override
   public void autonomousInit() {
     m_robotContainer.m_robotDrive.m_gyro.reset();
@@ -209,7 +193,7 @@ public class Robot extends TimedRobot {
       default:
         break;
       case kAuton2:
-        m_autonomousCommand = m_robotContainer.getLeftSpeakerLeaveCommand();
+        m_autonomousCommand = m_robotContainer.getBlueAmpSideLeaveCommand();
         CommandScheduler.getInstance()
             .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
                 .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
@@ -219,7 +203,17 @@ public class Robot extends TimedRobot {
                 .andThen(m_autonomousCommand));
         break;
       case kAuton3:
-        m_autonomousCommand = m_robotContainer.getRightSpeakerLeaveCommand();
+        m_autonomousCommand = m_robotContainer.getRedAmpSideLeaveCommand();
+        CommandScheduler.getInstance()
+            .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
+                .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
+                .andThen(new WaitCommand(.5))
+                .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
+                .andThen(new WaitCommand(1))
+                .andThen(m_autonomousCommand));
+        break;
+      case kAuton4:
+        m_autonomousCommand = m_robotContainer.getSourceSideLeaveCommand();
         CommandScheduler.getInstance()
             .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
                 .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
@@ -230,12 +224,12 @@ public class Robot extends TimedRobot {
                 .andThen(new WaitCommand(.5))
                 .andThen(m_autonomousCommand));
         break;
-      case kAuton4:
+      case kAuton5:
       m_autonomousCommand = m_robotContainer.getGoForwardsCommand();
       CommandScheduler.getInstance()
         .schedule(m_autonomousCommand);
         break;
-      case kAuton5:
+      case kAuton6:
       CommandScheduler.getInstance()
         .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
         .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
@@ -246,17 +240,12 @@ public class Robot extends TimedRobot {
     }
   }
 
-  /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
   }
 
   @Override
   public void teleopInit() {
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
     m_robotContainer.m_robotDrive.m_gyro.reset();
     m_robotContainer.intakeSubsystem.IntakeStop();
     m_robotContainer.flywheelSubsystem.FlywheelStop();
@@ -266,7 +255,6 @@ public class Robot extends TimedRobot {
 
   }
 
-  /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
 
@@ -276,8 +264,7 @@ public class Robot extends TimedRobot {
    
     // Driver Controls
 
-    if (m_robotContainer.m_leftDriverController.getRawButtonPressed(kFieldOrientedToggle_LB)) { // Toggles Field
-                                                                                                // Oriented Mode
+    if (m_robotContainer.m_leftDriverController.getRawButtonPressed(kFieldOrientedToggle_LB)) { // Toggles Field Oriented Mode
       if (m_robotContainer.fieldOriented == true) {
         m_robotContainer.fieldOriented = false;
       } else {
@@ -302,6 +289,12 @@ public class Robot extends TimedRobot {
       CommandScheduler.getInstance()
       .schedule(new ArmSetpointCommand(armPivot, ArmSetpoint.Four, currentSetpoint));
     }
+
+    if (m_robotContainer.m_rightDriverController.getRawButton(2)) {
+    CommandScheduler.getInstance()
+    .schedule(m_robotContainer.getAprilTagLineUpCommand(limelightX));
+    }
+    //Operator Controls
 
     if (m_robotContainer.m_operatorController1.getRawButtonPressed(kIntakePickup_LB) || m_robotContainer.m_operatorController2.getRawButtonPressed(kIntakePickup_LB)) { // Runs the Intake
       CommandScheduler.getInstance()
