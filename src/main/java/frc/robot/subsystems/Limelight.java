@@ -70,7 +70,7 @@ public class Limelight extends SubsystemBase {
     // get the default instance of NetworkTables
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
     // get a reference to the subtable called "datatable"
-    NetworkTable table = inst.getTable("limelight-rams");
+    NetworkTable table = inst.getTable("limelight");
     // NetworkTableEntry TeamEntry = table.getEntry("tx");
     
     NetworkTableEntry xEntry = table.getEntry("tx"); //Horizontal Offset From Crosshair To Target (LL1: -27 degrees to 27 degrees | LL2: -29.8 to 29.8 degrees)
