@@ -12,7 +12,7 @@ public class Limelight extends SubsystemBase {
   ///********************************************************
   ///PLEASE KEEP ALL COMMENTED LINES FOR POSSIBLE FUTURE USE
   ///********************************************************
-
+  public double xvalue;
   public boolean isLimelightLampOn(){
     if (NetworkTableInstance.getDefault().getTable("limelight-rams").getEntry("ledMode").getDouble(0) == 1){ //inline way to pull a networktable entry as a double
       return true;
@@ -87,8 +87,7 @@ public class Limelight extends SubsystemBase {
     double ta = aEntry.getDouble(0.0); // Target Area (0% of image to 100% of image)
     // double tl = lEntry.getDouble(0.0); // The pipeline’s latency contribution (ms) Add at least 11ms for image capture latency.
     double tv = vEntry.getDouble(0.0); // Whether the limelight has any valid targets (0 or 1)
-
-    
+    // double xvalue = table.getDouble();
     // ts Skew or rotation (-90 degrees to 0 degrees) CAN BE MULTIPLE TS (0-**)
     // cl	Capture pipeline latency (ms). Time between the end of the exposure of the middle row of the sensor to the beginning of the tracking pipeline.
     // tshort	Sidelength of shortest side of the fitted bounding box (pixels)
@@ -107,7 +106,7 @@ public class Limelight extends SubsystemBase {
     // camMode.setNumber(1); cam mode 1 for "webcam", 0 for vision processor
 
     // post to smart dashboard periodically
-    SmartDashboard.putNumber("Limelight X", tx);
+    SmartDashboard.putNumber("X Limelight", tx);
     SmartDashboard.putNumber("Limelight Y", ty);
     SmartDashboard.putNumber("Limelight Area", ta);
     //SmartDashboard.putNumber("Limelight Latency", tl);

@@ -262,4 +262,18 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
+
+  public void strafeRight() {
+    m_frontLeft.setDesiredState(new SwerveModuleState(.1, Rotation2d.fromDegrees(90)));
+    m_rearLeft.setDesiredState(new SwerveModuleState(.1, Rotation2d.fromDegrees(90)));
+    m_rearRight.setDesiredState(new SwerveModuleState(.1, Rotation2d.fromDegrees(90)));
+    m_frontRight.setDesiredState(new SwerveModuleState(.1, Rotation2d.fromDegrees(90)));
+  }
+
+  public void strafeLeft() {
+    m_frontLeft.setDesiredState(new SwerveModuleState(-.1, Rotation2d.fromDegrees(90)));
+    m_rearLeft.setDesiredState(new SwerveModuleState(-.1, Rotation2d.fromDegrees(90)));
+    m_rearRight.setDesiredState(new SwerveModuleState(-.1, Rotation2d.fromDegrees(90)));
+    m_frontRight.setDesiredState(new SwerveModuleState(-.1, Rotation2d.fromDegrees(90)));
+  }
 }

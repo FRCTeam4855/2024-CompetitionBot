@@ -99,8 +99,18 @@ public class RobotContainer {
                 .whileTrue(new RunCommand(
                         () -> m_robotDrive.setX(),
                         m_robotDrive));
-    }
 
+                new JoystickButton(m_rightDriverController, 2)
+                .whileTrue(new RunCommand(
+                        () -> m_robotDrive.strafeRight(),
+                        m_robotDrive));
+                new JoystickButton(m_leftDriverController, 2)
+                .whileTrue(new RunCommand(
+                        () -> m_robotDrive.strafeLeft(),
+                        m_robotDrive));
+    }
+    
+    
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *

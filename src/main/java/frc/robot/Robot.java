@@ -24,6 +24,7 @@ import frc.robot.commands.ClimberControlCommand;
 import frc.robot.commands.FlywheelLaunchCommand;
 import frc.robot.commands.IntakePickupCommand;
 import frc.robot.commands.IntakeStopCommand;
+import frc.robot.commands.LimelightStrafeCommand;
 import frc.robot.commands.IntakeDeliverCommand;
 import frc.robot.commands.IntakeDropCommand;
 import frc.robot.commands.IntakeInputCommand;
@@ -76,7 +77,6 @@ public class Robot extends TimedRobot {
   ArmPivot armPivot = new ArmPivot();
   ClimberSubsystem ClimberControl = new ClimberSubsystem();
   private double POVvalue;
-  private double limelightX;
   Limelight m_limelightSubsystem;
 
   @Override
@@ -119,7 +119,6 @@ public class Robot extends TimedRobot {
 
     m_robotContainer.intakeSubsystem.IntakeStop();
     armPivot.initPivot();
-    m_limelightSubsystem = new Limelight();
     // flywheelSubsystem.FlywheelStop();
 
     m_chooser.setDefaultOption("1. Leave Front Speaker", kAuton1);
@@ -132,6 +131,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.m_robotDrive.init();
 
     SmartDashboard.putData(m_chooser); // displays the auton options in shuffleboard, put in init block
+    m_limelightSubsystem = new Limelight();
     CameraServer.startAutomaticCapture();
     CameraServer.startAutomaticCapture();
   }
@@ -151,7 +151,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("FlywheelRunning?", m_robotContainer.flywheelSubsystem.runFlywheel);
     // SmartDashboard.putNumber("Flywheel Setpoint", flywheelSubsystem.setpoint);
     // flywheelSubsystem.periodicFlywheel();
-    limelightX = m_limelightSubsystem.tx;
+    m_limelightSubsystem.updateDashboard();
   }
 
   @Override
@@ -235,8 +235,7 @@ public class Robot extends TimedRobot {
         .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
         .andThen(new WaitCommand(.5))
         .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem)));
-
-        
+        break;
     }
   }
 
@@ -290,9 +289,9 @@ public class Robot extends TimedRobot {
       .schedule(new ArmSetpointCommand(armPivot, ArmSetpoint.Four, currentSetpoint));
     }
 
-    if (m_robotContainer.m_rightDriverController.getRawButton(2)) {
-    CommandScheduler.getInstance()
-    .schedule(m_robotContainer.getAprilTagLineUpCommand(limelightX));
+    if (m_robotContainer.m_rightDriverController.getRawButtonPressed(3)) {
+      CommandScheduler.getInstance()
+      .schedule(new LimelightStrafeCommand(m_robotContainer.m_robotDrive, m_limelightSubsystem));
     }
     //Operator Controls
 
