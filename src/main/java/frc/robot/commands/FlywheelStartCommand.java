@@ -20,7 +20,6 @@ public class FlywheelStartCommand extends Command {
     }
 
     public boolean isFinished() {
-        return true;
-
+        return Launcher.FlywheelCheck();
     }
 }

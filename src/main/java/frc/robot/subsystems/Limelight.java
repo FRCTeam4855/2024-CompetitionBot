@@ -13,6 +13,8 @@ public class Limelight extends SubsystemBase {
   ///PLEASE KEEP ALL COMMENTED LINES FOR POSSIBLE FUTURE USE
   ///********************************************************
   public double xvalue;
+  public double limelightTarget;
+  public boolean onTarget;
   public boolean isLimelightLampOn(){
     if (NetworkTableInstance.getDefault().getTable("limelight-rams").getEntry("ledMode").getDouble(0) == 1){ //inline way to pull a networktable entry as a double
       return true;
@@ -76,6 +78,7 @@ public class Limelight extends SubsystemBase {
     NetworkTableEntry xEntry = table.getEntry("tx"); //Horizontal Offset From Crosshair To Target (LL1: -27 degrees to 27 degrees | LL2: -29.8 to 29.8 degrees)
     NetworkTableEntry yEntry = table.getEntry("ty"); //Vertical Offset From Crosshair To Target (LL1: -20.5 degrees to 20.5 degrees | LL2: -24.85 to 24.85 degrees)
     NetworkTableEntry aEntry = table.getEntry("ta"); //Target Area (0% of image to 100% of image)
+    NetworkTableEntry tEntry = table.getEntry("tid");
     /*
     NetworkTableEntry lEntry = table.getEntry("tl"); //The pipeline’s latency contribution (ms). Add to “cl” to get total latency.
     */
@@ -87,7 +90,14 @@ public class Limelight extends SubsystemBase {
     double ta = aEntry.getDouble(0.0); // Target Area (0% of image to 100% of image)
     // double tl = lEntry.getDouble(0.0); // The pipeline’s latency contribution (ms) Add at least 11ms for image capture latency.
     double tv = vEntry.getDouble(0.0); // Whether the limelight has any valid targets (0 or 1)
-    // double xvalue = table.getDouble();
+    limelightTarget = tEntry.getDouble(-1);
+    xvalue = xEntry.getDouble(0);
+
+    if (xvalue <= 1 && xvalue >= -1) {
+      onTarget = true;
+    } else {
+      onTarget = false;
+    }
     // ts Skew or rotation (-90 degrees to 0 degrees) CAN BE MULTIPLE TS (0-**)
     // cl	Capture pipeline latency (ms). Time between the end of the exposure of the middle row of the sensor to the beginning of the tracking pipeline.
     // tshort	Sidelength of shortest side of the fitted bounding box (pixels)
@@ -104,7 +114,7 @@ public class Limelight extends SubsystemBase {
     // ledMode.setNumber(3); // force on
 
     // camMode.setNumber(1); cam mode 1 for "webcam", 0 for vision processor
-
+    SmartDashboard.putBoolean("Limelight on Target", onTarget);
     // post to smart dashboard periodically
     SmartDashboard.putNumber("X Limelight", tx);
     SmartDashboard.putNumber("Limelight Y", ty);

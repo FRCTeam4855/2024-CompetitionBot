@@ -3,9 +3,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Limelight;
+
 public class LimelightStrafeCommand extends Command {
     Limelight limelight;
     DriveSubsystem drive;
+
     public LimelightStrafeCommand(DriveSubsystem thisDrive, Limelight thisLimelight) {
         drive = thisDrive;
         limelight = thisLimelight;
@@ -16,14 +18,18 @@ public class LimelightStrafeCommand extends Command {
     }
 
     public void execute() {
-        if(limelight.xvalue >= .5) {
+        if (limelight.xvalue >= 1) {
             drive.strafeRight();
-        } else if(limelight.xvalue <= -.5) {
+        } else if (limelight.xvalue <= -1) {
             drive.strafeLeft();
         }
     }
 
     public boolean isFinished() {
-        return true;
+        if (limelight.xvalue < 1 || limelight.xvalue > 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

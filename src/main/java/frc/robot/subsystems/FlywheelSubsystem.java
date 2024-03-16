@@ -31,6 +31,9 @@ public class FlywheelSubsystem extends SubsystemBase {
     public int runFlywheel;
     public double setpoint;
     public boolean flywheelRunning;
+    public boolean flywheelAtSetpoint;
+    public double leftFlywheelSpeed;
+    public double rightFlywheelSpeed;
 
     public FlywheelSubsystem() {
         m_rightFlywheelSparkMax = new CANSparkMax(12, MotorType.kBrushless);
@@ -52,7 +55,7 @@ public class FlywheelSubsystem extends SubsystemBase {
         L_kI = 0;
         L_kD = 0; 
         L_kIz = 0; 
-        L_kFF = 0.000175;
+        L_kFF = 0.000185;
         //kFF = 0; 
         kMaxOutput = 1; 
         kMinOutput = 0;
@@ -94,8 +97,16 @@ public class FlywheelSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-      SmartDashboard.putNumber("Right Flywheel Speed", m_rightFlywheelEncoder.getVelocity());
-      SmartDashboard.putNumber("Left Flywheel Speed", m_leftFlywheelEncoder.getVelocity());
+      rightFlywheelSpeed = m_rightFlywheelEncoder.getVelocity();
+      leftFlywheelSpeed = m_leftFlywheelEncoder.getVelocity();
+      SmartDashboard.putNumber("Right Flywheel Speed", rightFlywheelSpeed);
+      SmartDashboard.putNumber("Left Flywheel Speed", leftFlywheelSpeed);
+      if (rightFlywheelSpeed >= setpoint - 100 && leftFlywheelSpeed >= setpoint - 100) {
+        flywheelAtSetpoint = true;
+      } else {
+        flywheelAtSetpoint = false;
+      }
+      SmartDashboard.putBoolean("Flywheel At Setpoint", flywheelAtSetpoint);
     }
 
     public void FlywheelStart(){

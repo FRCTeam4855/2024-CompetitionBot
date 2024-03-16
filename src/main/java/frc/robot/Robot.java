@@ -188,6 +188,7 @@ public class Robot extends TimedRobot {
                 .andThen(new IntakeInputCommand(m_robotContainer.intakeSubsystem))
                 .andThen(m_autonomousCommand)
                 .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.Six, currentSetpoint))
+                .andThen(new LimelightStrafeCommand(m_robotContainer.m_robotDrive, m_limelightSubsystem))
                 .andThen(new WaitCommand(1))
                 .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem)));
       default:
@@ -289,7 +290,7 @@ public class Robot extends TimedRobot {
       .schedule(new ArmSetpointCommand(armPivot, ArmSetpoint.Four, currentSetpoint));
     }
 
-    if (m_robotContainer.m_rightDriverController.getRawButtonPressed(3)) {
+    if (m_robotContainer.m_rightDriverController.getRawButton(3)) { //limelight line up
       CommandScheduler.getInstance()
       .schedule(new LimelightStrafeCommand(m_robotContainer.m_robotDrive, m_limelightSubsystem));
     }
@@ -360,7 +361,6 @@ public class Robot extends TimedRobot {
       CommandScheduler.getInstance().schedule(
           (new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
               .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
-              .andThen(new WaitCommand(1))
               .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
               .andThen(new FlywheelStopCommand(m_robotContainer.flywheelSubsystem))
               .andThen(new IntakeStopCommand(m_robotContainer.intakeSubsystem))
