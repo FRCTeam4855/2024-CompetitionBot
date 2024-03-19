@@ -78,7 +78,7 @@ public class RobotContainer {
                                         m_leftDriverController.getRawAxis(0) * speedMultiplier,
                                         kDriveDeadband),
                                 -MathUtil.applyDeadband(
-                                        m_rightDriverController.getRawAxis(0) * speedMultiplier,
+                                        m_rightDriverController.getRawAxis(0) * speedMultiplier * 0.5,
                                         kDriveDeadband),
                                 fieldOriented, true),
                         m_robotDrive));

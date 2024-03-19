@@ -50,12 +50,12 @@ public class FlywheelSubsystem extends SubsystemBase {
         R_kI = 0;
         R_kD = 0; 
         R_kIz = 0; 
-        R_kFF = 0.000175;
+        R_kFF = 0.000185;
         L_kP = 0.0002; 
         L_kI = 0;
         L_kD = 0; 
         L_kIz = 0; 
-        L_kFF = 0.000185;
+        L_kFF = 0.00019;
         //kFF = 0; 
         kMaxOutput = 1; 
         kMinOutput = 0;
@@ -180,8 +180,8 @@ public class FlywheelSubsystem extends SubsystemBase {
     }
 
     public boolean FlywheelCheck(){
-      if(Math.abs(setpoint - m_rightFlywheelEncoder.getVelocity()) < 50) {
-        if(Math.abs(setpoint - m_leftFlywheelEncoder.getVelocity()) < 50) {
+      if((setpoint - m_rightFlywheelEncoder.getVelocity()) < 25) {
+        if((setpoint - m_leftFlywheelEncoder.getVelocity()) < 25) {
           return true;
         }
       }

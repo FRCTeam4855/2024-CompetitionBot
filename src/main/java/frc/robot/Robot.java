@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.ArmSetpoint;
 import frc.robot.commands.ArmSetpointCommand;
 import frc.robot.commands.ClimberControlCommand;
+import frc.robot.commands.DriveStopCommand;
 import frc.robot.commands.FlywheelLaunchCommand;
 import frc.robot.commands.IntakePickupCommand;
 import frc.robot.commands.IntakeStopCommand;
@@ -181,16 +182,16 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance()
             .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
                 .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
-                .andThen(new WaitCommand(1))
                 .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
-                .andThen(new WaitCommand(1))
                 .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.One, currentSetpoint))
                 .andThen(new IntakeInputCommand(m_robotContainer.intakeSubsystem))
                 .andThen(m_autonomousCommand)
                 .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.Six, currentSetpoint))
                 .andThen(new LimelightStrafeCommand(m_robotContainer.m_robotDrive, m_limelightSubsystem))
-                .andThen(new WaitCommand(1))
-                .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem)));
+                .andThen(new DriveStopCommand(m_robotContainer.m_robotDrive))
+                .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
+                .andThen(new FlywheelStopCommand(m_robotContainer.flywheelSubsystem))
+                .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.Four, currentSetpoint)));
       default:
         break;
       case kAuton2:
@@ -198,9 +199,8 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance()
             .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
                 .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
-                .andThen(new WaitCommand(.5))
                 .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
-                .andThen(new WaitCommand(1))
+                .andThen(new WaitCommand(.5))
                 .andThen(m_autonomousCommand));
         break;
       case kAuton3:
@@ -208,9 +208,8 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance()
             .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
                 .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
-                .andThen(new WaitCommand(.5))
                 .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
-                .andThen(new WaitCommand(1))
+                .andThen(new WaitCommand(.5))
                 .andThen(m_autonomousCommand));
         break;
       case kAuton4:
@@ -218,7 +217,6 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance()
             .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
                 .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
-                .andThen(new WaitCommand(.5))
                 .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
                 .andThen(new WaitCommand(.5))
                 .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.Five, currentSetpoint))
@@ -234,7 +232,6 @@ public class Robot extends TimedRobot {
       CommandScheduler.getInstance()
         .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint))
         .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
-        .andThen(new WaitCommand(.5))
         .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem)));
         break;
     }
@@ -334,7 +331,7 @@ public class Robot extends TimedRobot {
     if (m_robotContainer.m_operatorController1.getPOV() == 0) { // Defense setpoint
       CommandScheduler.getInstance()
           .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Five, currentSetpoint)));
-      currentSetpoint = ArmSetpoint.Five;
+      currentSetpoint = ArmSetpoint.One;
     }
     
     if (m_robotContainer.m_operatorController1.getRawButton(kArmSetpoint3Button_X)) { // Goes to amp position and runs the flywheel and intake.
