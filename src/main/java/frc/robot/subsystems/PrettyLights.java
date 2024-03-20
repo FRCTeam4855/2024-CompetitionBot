@@ -122,6 +122,7 @@ public class PrettyLights extends SubsystemBase {
     public void setLEDs(double color) {
         pattern = color;
         leds.set(color);
+
     }
 
     /**

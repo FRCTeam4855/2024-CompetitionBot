@@ -16,7 +16,7 @@ public class Limelight extends SubsystemBase {
   public double limelightTarget;
   public boolean onTarget;
   public boolean isLimelightLampOn(){
-    if (NetworkTableInstance.getDefault().getTable("limelight-rams").getEntry("ledMode").getDouble(0) == 1){ //inline way to pull a networktable entry as a double
+    if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").getDouble(0) == 1){ //inline way to pull a networktable entry as a double
       return true;
     } else { 
       return false;
@@ -25,27 +25,27 @@ public class Limelight extends SubsystemBase {
 
   public void setLimelightLampOn() {
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    NetworkTable table = inst.getTable("limelight-rams");
+    NetworkTable table = inst.getTable("limelight");
     NetworkTableEntry ledMode = table.getEntry("ledMode");
     ledMode.setNumber(3);
   }
 
   public void setLimelightLampOff() {
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    NetworkTable table = inst.getTable("limelight-rams");
+    NetworkTable table = inst.getTable("limelight");
     NetworkTableEntry ledMode = table.getEntry("ledMode");
     ledMode.setNumber(1);
   }
 
   public boolean isLimelightOnAprilTagMode(){
-    if (NetworkTableInstance.getDefault().getTable("limelight-rams").getEntry("pipeline").getDouble(0) == 0){
+    if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").getDouble(0) == 0){
       return true;
     } else {
       return false;
     }
   }
   public boolean doesLimelightHaveTarget(){
-    if (NetworkTableInstance.getDefault().getTable("limelight-rams").getEntry("tv").getDouble(0) == 1){
+    if (NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1){
       return true;
     } else {
       return false;
@@ -54,14 +54,14 @@ public class Limelight extends SubsystemBase {
 
   public void setLimelightPipeToAprilTag() {
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    NetworkTable table = inst.getTable("limelight-rams");
+    NetworkTable table = inst.getTable("limelight");
     NetworkTableEntry pipeline = table.getEntry("pipeline");
     pipeline.setNumber(0);
   }
 
   public void setLimelightPipeToRetroTape() {
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
-    NetworkTable table = inst.getTable("limelight-rams");
+    NetworkTable table = inst.getTable("limelight");
     NetworkTableEntry pipeline = table.getEntry("pipeline");
     pipeline.setNumber(1);
   }
@@ -93,7 +93,7 @@ public class Limelight extends SubsystemBase {
     limelightTarget = tEntry.getDouble(-1);
     xvalue = xEntry.getDouble(0);
 
-    if (xvalue <= 1 && xvalue >= -1) {
+    if (xvalue <= 4 && xvalue >= 0 && doesLimelightHaveTarget()) {
       onTarget = true;
     } else {
       onTarget = false;
