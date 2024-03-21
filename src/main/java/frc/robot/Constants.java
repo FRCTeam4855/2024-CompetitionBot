@@ -52,7 +52,7 @@ public final class Constants {
   //public static final double kArmSetpoint4 = 15; // Transit
   public static final double kArmSetpoint4 = 55; // Transit
   public static final double kArmSetpoint5 = 15; // D-D-D-Defense 
-  public static final double kArmSetpoint6 = 26.25; // Long shot
+  public static final double kArmSetpoint6 = 25; // Long shot
   public static final double kArmSetpoint7 = 15; // Under Stage
   public static final double kArmPivotSlop = 0; // acceptable range for arm extension setpoints
   public static final double kSpeedMultiplierDefault = 1;   // the default speed when no accessory buttons are held down
@@ -68,7 +68,7 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 4;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
-    public static final double kDirectionSlewRate = 2.0; // radians per second
+    public static final double kDirectionSlewRate = 3.0; // radians per second
     public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
     public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
     // Chassis configuration

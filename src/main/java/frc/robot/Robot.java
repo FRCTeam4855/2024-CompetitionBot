@@ -139,8 +139,6 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData(m_chooser); // displays the auton options in shuffleboard, put in init block
     m_limelightSubsystem = new Limelight();
-    CameraServer.startAutomaticCapture();
-    CameraServer.startAutomaticCapture();
     lights.setLEDs(lights.YELLOW);
     timer = new Timer();
   }
@@ -310,19 +308,22 @@ public class Robot extends TimedRobot {
     // Operator Controls
 
     if (m_robotContainer.m_operatorController1.getRawButtonPressed(kIntakePickup_LB)
-        || m_robotContainer.m_operatorController2.getRawButtonPressed(kIntakePickup_LB)) { // Runs the Intake
+        // || m_robotContainer.m_operatorController2.getRawButtonPressed(kIntakePickup_LB)
+        ) { // Runs the Intake
       CommandScheduler.getInstance()
           .schedule((new IntakePickupCommand(m_robotContainer.intakeSubsystem)));
     }
 
     if (m_robotContainer.m_operatorController1.getRawButtonPressed(kIntakeStop_Back)
-        || m_robotContainer.m_operatorController2.getRawButtonPressed(kIntakeStop_Back)) { // Stops the Intake
+        // || m_robotContainer.m_operatorController2.getRawButtonPressed(kIntakeStop_Back)
+        ) { // Stops the Intake
       CommandScheduler.getInstance()
           .schedule((new IntakeStopCommand(m_robotContainer.intakeSubsystem)));
     }
 
     if (m_robotContainer.m_operatorController1.getRawButtonPressed(kIntakeDrop_RB)
-        || m_robotContainer.m_operatorController2.getRawButtonPressed(kIntakeDrop_RB)) { // Reverses the Intake
+        // || m_robotContainer.m_operatorController2.getRawButtonPressed(kIntakeDrop_RB)
+        ) { // Reverses the Intake
       CommandScheduler.getInstance()
           .schedule((new IntakeDropCommand(m_robotContainer.intakeSubsystem)));
     }
@@ -336,14 +337,15 @@ public class Robot extends TimedRobot {
       currentSetpoint = ArmSetpoint.Four;
     }
 
-    if (m_robotContainer.m_operatorController2.getRawButton(kArmSetpoint1Button_A)) { // Sets the Arm to intake position
-      CommandScheduler.getInstance().schedule(
-          (new ArmSetpointCommand(armPivot, ArmSetpoint.One, currentSetpoint)));
-      currentSetpoint = ArmSetpoint.One;
-    }
+    // if (m_robotContainer.m_operatorController2.getRawButton(kArmSetpoint1Button_A)) { // Sets the Arm to intake position
+    //   CommandScheduler.getInstance().schedule(
+    //       (new ArmSetpointCommand(armPivot, ArmSetpoint.One, currentSetpoint)));
+    //   currentSetpoint = ArmSetpoint.One;
+    // }
 
     if (m_robotContainer.m_operatorController1.getRawButtonPressed(kArmSetpoint4Button_B)
-        || m_robotContainer.m_operatorController2.getRawButtonPressed(kArmSetpoint4Button_B)) { // Transit Position
+        // || m_robotContainer.m_operatorController2.getRawButtonPressed(kArmSetpoint4Button_B)
+        ) { // Transit Position
       CommandScheduler.getInstance()
           .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Four, currentSetpoint)));
       currentSetpoint = ArmSetpoint.Four;
@@ -370,11 +372,11 @@ public class Robot extends TimedRobot {
       currentSetpoint = ArmSetpoint.Three;
     }
 
-    if (m_robotContainer.m_operatorController2.getRawButton(kArmSetpoint3Button_X)) { // Goes to amp position
-      CommandScheduler.getInstance()
-          .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Three, currentSetpoint)));
-      currentSetpoint = ArmSetpoint.Three;
-    }
+    // if (m_robotContainer.m_operatorController2.getRawButton(kArmSetpoint3Button_X)) { // Goes to amp position
+    //   CommandScheduler.getInstance()
+    //       .schedule((new ArmSetpointCommand(armPivot, ArmSetpoint.Three, currentSetpoint)));
+    //   currentSetpoint = ArmSetpoint.Three;
+    // }
 
     if (m_robotContainer.m_operatorController1.getRawButton(kArmSetpoint2Button_Y)) { // Goes to speaker position and
                                                                                       // runs the flywheel and intake
@@ -390,10 +392,10 @@ public class Robot extends TimedRobot {
       currentSetpoint = ArmSetpoint.Four;
     }
 
-    if (m_robotContainer.m_operatorController2.getRawButton(kArmSetpoint2Button_Y)) { // Goes to speaker position
-      CommandScheduler.getInstance().schedule(
-          (new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint)));
-    }
+    // if (m_robotContainer.m_operatorController2.getRawButton(kArmSetpoint2Button_Y)) { // Goes to speaker position
+    //   CommandScheduler.getInstance().schedule(
+    //       (new ArmSetpointCommand(armPivot, ArmSetpoint.Two, currentSetpoint)));
+    // }
 
     CommandScheduler.getInstance().schedule(
         (new ClimberControlCommand(ClimberControl,

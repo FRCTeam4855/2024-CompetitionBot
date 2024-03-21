@@ -18,15 +18,15 @@ public class LimelightStrafeCommand extends Command {
     }
 
     public void execute() {
-        if (limelight.xvalue >= 4) {
+        if (limelight.xvalue >= 2) {
             drive.strafeRight();
-        } else if (limelight.xvalue <= 0) {
+        } else if (limelight.xvalue <= -2) {
             drive.strafeLeft();
         }
     }
 
     public boolean isFinished() {
-        if (limelight.xvalue < 3 && limelight.xvalue > 1) {
+        if (limelight.xvalue < 2 && limelight.xvalue > -2) {
             drive.setStop();
             return true;
         } else {

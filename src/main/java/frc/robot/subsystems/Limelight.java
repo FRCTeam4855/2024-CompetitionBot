@@ -93,7 +93,7 @@ public class Limelight extends SubsystemBase {
     limelightTarget = tEntry.getDouble(-1);
     xvalue = xEntry.getDouble(0);
 
-    if (xvalue <= 4 && xvalue >= 0 && doesLimelightHaveTarget()) {
+    if (xvalue <= 2 && xvalue >= -2 && doesLimelightHaveTarget()) {
       onTarget = true;
     } else {
       onTarget = false;
