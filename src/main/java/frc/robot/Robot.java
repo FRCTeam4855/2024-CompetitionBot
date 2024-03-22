@@ -225,7 +225,7 @@ public class Robot extends TimedRobot {
                 .andThen(new FlywheelStartCommand(m_robotContainer.flywheelSubsystem))
                 .andThen(new IntakeDeliverCommand(m_robotContainer.intakeSubsystem))
                 .andThen(new WaitCommand(.5))
-                .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.Five, currentSetpoint))
+                .andThen(new ArmSetpointCommand(armPivot, ArmSetpoint.Four, currentSetpoint))
                 .andThen(new WaitCommand(.5))
                 .andThen(m_autonomousCommand));
         break;
@@ -263,7 +263,7 @@ public class Robot extends TimedRobot {
     if (timer.getMatchTime() <= 20) {
       timeColor = -.11;
     } else {
-      timeColor = .67;
+      timeColor = .53;
     }
     // SmartDashboard.putBoolean("Proximity",
     // m_robotContainer.intakeSubsystem.m_noteSensor.get());
@@ -437,7 +437,7 @@ public class Robot extends TimedRobot {
     } else if (m_limelightSubsystem.onTarget) {
       lights.setLEDs(lights.DARK_GREEN);
     } else if (m_robotContainer.intakeSubsystem.intakeSensor) {
-      lights.setLEDs(lights.VIOLET);
+      lights.setLEDs(lights.YELLOW);
     } else {
       lights.setLEDs(timeColor);
     }

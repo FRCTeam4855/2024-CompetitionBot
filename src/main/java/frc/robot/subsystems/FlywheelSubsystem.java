@@ -50,7 +50,7 @@ public class FlywheelSubsystem extends SubsystemBase {
         R_kI = 0;
         R_kD = 0; 
         R_kIz = 0; 
-        R_kFF = 0.000185;
+        R_kFF = 0.000180;
         L_kP = 0.0002; 
         L_kI = 0;
         L_kD = 0; 

@@ -52,7 +52,7 @@ public final class Constants {
   //public static final double kArmSetpoint4 = 15; // Transit
   public static final double kArmSetpoint4 = 55; // Transit
   public static final double kArmSetpoint5 = 15; // D-D-D-Defense 
-  public static final double kArmSetpoint6 = 25; // Long shot
+  public static final double kArmSetpoint6 = 28; // Long shot
   public static final double kArmSetpoint7 = 15; // Under Stage
   public static final double kArmPivotSlop = 0; // acceptable range for arm extension setpoints
   public static final double kSpeedMultiplierDefault = 1;   // the default speed when no accessory buttons are held down

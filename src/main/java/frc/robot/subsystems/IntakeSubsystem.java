@@ -35,8 +35,8 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void IntakeDeliver() {
-        m_intakeSparkMax.set(.5);
-        IntakeSpeed = .5;
+        m_intakeSparkMax.set(.75);
+        IntakeSpeed = .75;
         useSensor = false;
     }
     
