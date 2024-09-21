@@ -119,9 +119,16 @@ public final class Constants {
   }
 
   public static final class OIConstants {
-    public static final int kDriverControllerPort = 0;
+    public static final int kLeftDriverControllerPort = 0;  
+    public static final int kRightDriverControllerPort = 1;
+    public static final int kOperatorControllerPort1 = 2;
+    public static final int kOperatorControllerPort2 = 3;
     public static final double kDriveDeadband = 0.1;
     public static final double kRotateScale = 0.5;
+    public static final double kSpeedMultiplierDefault = 1;   // the default speed when no accessory buttons are held down
+    public static final double kSpeedMultiplierPrecise = 0.5; // the speed when the trigger is held down for precise movements
+
+    public static final int kGyroReset_Start = 4;
 
     public static final String kAuton1 = "1. Straight Ahead";
     public static final String kAuton2 = "2. S Pattern";
@@ -132,6 +139,23 @@ public final class Constants {
     public static final String kAuton7 = "7. Trash";
     public static final String kAuton8 = "8. Rat";
     public static final String kAuton9 = "9. G>^v";
+  }
+
+  public static final class ArmConstants {
+    public enum ArmSetpoint {
+      One, Two, Three, Four, Five, Six, Seven
+    }
+
+    public static final double kArmSetpoint1 = .05; // Intake
+    public static final double kArmSetpoint2 = 12; // Speaker
+    public static final double kArmSetpoint3 = 100; // Amp
+    //public static final double kArmSetpoint4 = 15; // Transit
+    public static final double kArmSetpoint4 = 55; // Transit
+    public static final double kArmSetpoint5 = 15; // D-D-D-Defense 
+    public static final double kArmSetpoint6 = 28; // Long shot
+    public static final double kArmSetpoint7 = 15; // Under Stage
+    public static final double kArmPivotSlop = 0; // acceptable range for arm extension setpoints
+
   }
 
   public static final class AutoConstants {

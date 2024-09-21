@@ -5,8 +5,8 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Limelight;
 
 public class LimelightStrafeCommand extends Command {
-    Limelight limelight;
     DriveSubsystem drive;
+    Limelight limelight;
 
     public LimelightStrafeCommand(DriveSubsystem thisDrive, Limelight thisLimelight) {
         drive = thisDrive;
@@ -14,7 +14,6 @@ public class LimelightStrafeCommand extends Command {
     }
 
     public void initialize() {
-
     }
 
     public void execute() {
