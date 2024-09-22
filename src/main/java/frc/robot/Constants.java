@@ -125,10 +125,19 @@ public final class Constants {
     public static final int kOperatorControllerPort2 = 3;
     public static final double kDriveDeadband = 0.1;
     public static final double kRotateScale = 0.5;
+    public static final int kJS_Trigger = 1;
     public static final double kSpeedMultiplierDefault = 1;   // the default speed when no accessory buttons are held down
     public static final double kSpeedMultiplierPrecise = 0.5; // the speed when the trigger is held down for precise movements
 
     public static final int kGyroReset_Start = 4;
+    public static final int kFieldOrientedToggle_LB = 5;
+    public static final int kIntakePickup_LB = 5;
+    public static final int kIntakeStop_Back = 7;
+    public static final int kIntakeDrop_RB = 6;
+    public static final int kArmSetpoint1Button_A = 1;
+    public static final int kArmSetpoint4Button_B = 2;
+    public static final int kArmSetpoint3Button_X = 3;
+    public static final int kArmSetpoint2Button_Y = 4;
 
     public static final String kAuton1 = "1. Straight Ahead";
     public static final String kAuton2 = "2. S Pattern";

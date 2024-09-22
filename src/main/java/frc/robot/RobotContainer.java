@@ -15,14 +15,23 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
+import frc.robot.Constants.ArmConstants.ArmSetpoint;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.FlywheelSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.ArmPivot;
+import frc.robot.commands.ArmSetpointCommand;
+import frc.robot.commands.IntakeDropCommand;
+import frc.robot.commands.IntakePickupCommand;
+import frc.robot.commands.IntakeStopCommand;
+import frc.robot.commands.IntakeDeliverCommand;
 import frc.robot.commands.LimelightStrafeCommand;
+import frc.robot.commands.FlywheelStartCommand;
+import frc.robot.commands.FlywheelStopCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -39,8 +48,10 @@ public class RobotContainer {
 
     // The robot's subsystems
     private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-    private final IntakeSubsystem m_intake = new IntakeSubsystem();
+    public final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final Limelight m_limelight = new Limelight();
+    private final ArmPivot m_armPivot = new ArmPivot();
+    private final FlywheelSubsystem m_flyWheel = new FlywheelSubsystem();
 
     // The driver's controller
     Joystick m_leftDriverController = new Joystick(OIConstants.kLeftDriverControllerPort);
@@ -82,37 +93,91 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     private void configureButtonBindings() {
-        /*new JoystickButton(m_driverController, Button.kX.value)
-            .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));*/
-
-        new JoystickButton(m_leftDriverController, OIConstants.kGyroReset_Start)  //4855
+        new JoystickButton(m_leftDriverController, OIConstants.kGyroReset_Start)  //Gyro reset
             .onTrue(new RunCommand(
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive));
 
-        new JoystickButton(m_rightDriverController, 3) //4855 0
+        new JoystickButton(m_rightDriverController, 3) // limelight line up
             .whileTrue(new RunCommand(
-                () -> LimelightStrafeCommand.LimelightStrafeCommand(m_robotDrive, m_limelight),
-                m_robotDrive, m_limelight)); //4855
-  
-        new JoystickButton(m_driverController, Button.kRightBumper.value)
-            .whileTrue(new RunCommand(
-                () -> m_robotDrive.strafeRight(),
-                m_robotDrive)); //4855
-             
-        new JoystickButton(m_driverController, Button.kBack.value)
-            .whileTrue(new RunCommand(
-                () -> m_robotDrive.rotateLeft(),
-                m_robotDrive)); //4855
+                () -> new LimelightStrafeCommand(m_robotDrive, m_limelight),
+                m_robotDrive, m_limelight));
 
-        new JoystickButton(m_driverController, Button.kStart.value)
-            .whileTrue(new RunCommand(
-                () -> m_robotDrive.rotateRight(),
-                m_robotDrive)); //4855
-    } 
+        new JoystickButton(m_rightDriverController, OIConstants.kFieldOrientedToggle_LB)  //Field oriented toggle
+            .onTrue(new RunCommand(
+                () -> toggleFieldOriented()));
 
+        new JoystickButton(m_leftDriverController, OIConstants.kJS_Trigger)  //Precise Driving Mode set
+            .onTrue(new RunCommand(
+                () -> speedMultiplier=OIConstants.kSpeedMultiplierPrecise));
+
+        new JoystickButton(m_leftDriverController, OIConstants.kJS_Trigger)  //Precise Driving Mode clear
+            .onFalse(new RunCommand(
+                () -> speedMultiplier=OIConstants.kSpeedMultiplierDefault));
+
+        new JoystickButton(m_rightDriverController, OIConstants.kJS_Trigger) //Lower Arm to go under stage
+            .onTrue(new RunCommand(
+                () -> new ArmSetpointCommand(m_armPivot, ArmSetpoint.Seven),
+                m_armPivot));
+
+        new JoystickButton(m_rightDriverController, OIConstants.kJS_Trigger) //Return arm to transit position
+            .onFalse(new RunCommand(
+                () -> new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four),
+                m_armPivot));
+
+        new JoystickButton(m_operatorController1, OIConstants.kIntakePickup_LB) // Runs the Intake
+            .onTrue(new RunCommand(
+                () -> new IntakePickupCommand(m_intake),
+                m_intake));
+
+        new JoystickButton(m_operatorController1, OIConstants.kIntakeStop_Back) // Stops the Intake
+            .onTrue(new RunCommand(
+                () -> new IntakeStopCommand(m_intake),
+                m_intake));
+
+        new JoystickButton(m_operatorController1, OIConstants.kIntakeDrop_RB)   // Reverses the Intake
+            .onTrue(new RunCommand(
+                () -> new IntakeDropCommand(m_intake),
+                m_intake));
+
+        new JoystickButton(m_operatorController1, OIConstants.kArmSetpoint1Button_A)            // Sets the Arm to intake position
+                                                                                                // and runs the intake
+            .onTrue(new RunCommand( () -> new ArmSetpointCommand(m_armPivot, ArmSetpoint.One)
+                .alongWith(new IntakePickupCommand(m_intake))
+                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four)),
+                m_intake));
+
+        new JoystickButton(m_rightDriverController, OIConstants.kArmSetpoint4Button_B)  // Transit Position
+            .onFalse(new RunCommand(
+                () -> new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four),
+                m_armPivot));
+
+        new JoystickButton(m_operatorController1, OIConstants.kArmSetpoint3Button_X)            // Goes to amp position and runs the flywheel and intake.
+            .onTrue(new RunCommand( () -> new ArmSetpointCommand(m_armPivot, ArmSetpoint.Three)
+                .alongWith(new FlywheelStartCommand(m_flyWheel))
+                .andThen(new IntakeDeliverCommand(m_intake))
+                .andThen(new IntakeStopCommand(m_intake))
+                .andThen(new FlywheelStopCommand(m_flyWheel))
+                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four)),
+                m_intake));
+
+        new JoystickButton(m_operatorController1, OIConstants.kArmSetpoint2Button_Y)            // Goes to speaker position and runs the flywheel and intake.
+            .onTrue(new RunCommand( () -> new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
+                .alongWith(new FlywheelStartCommand(m_flyWheel))
+                .andThen(new IntakeDeliverCommand(m_intake))
+                .andThen(new FlywheelStopCommand(m_flyWheel))
+                .andThen(new IntakeStopCommand(m_intake))                
+                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four)),
+                m_intake));
+    }
+
+    private void toggleFieldOriented () {
+        if (fieldOriented == true) {
+            fieldOriented = false;
+          } else {
+            fieldOriented = true;
+          }  
+    }
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
