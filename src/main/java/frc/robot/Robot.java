@@ -37,6 +37,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+   
 
     m_chooser.setDefaultOption("1. Straight Ahead", OIConstants.kAuton1);
     m_chooser.addOption("2. S Pattern", OIConstants.kAuton2);
@@ -48,7 +49,8 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("8. Rat", OIConstants.kAuton8);
     m_chooser.addOption("9. G>^v", OIConstants.kAuton9);
    SmartDashboard.putData(m_chooser);
-    }
+  
+  }
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
@@ -58,6 +60,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putBoolean("Field Oriented", RobotContainer.fieldOriented);
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic

@@ -5,10 +5,8 @@ import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
 //import edu.wpi.first.math.controller.ArmFeedforward;
 import frc.robot.AdjArmFeedforward;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
@@ -32,7 +30,8 @@ public class ArmPivot extends SubsystemBase {
   double kI = 0;
   double kD = 0;
   AdjArmFeedforward feedforward = new AdjArmFeedforward(kS, kG, kV);
-
+ 
+ 
   // unnecessary manual controls, not needed when using setpoint control
 
   public double getPivotPosition() {
@@ -44,8 +43,7 @@ public class ArmPivot extends SubsystemBase {
     // else
     //   return (rawPosition - zeroOffset + 360);
   }
-
-  public void initPivot() {
+public void initPivot() {
     // PID coefficients
     m_armPivot.restoreFactoryDefaults();
     m_armPivot.setIdleMode(IdleMode.kBrake);
@@ -83,8 +81,12 @@ public class ArmPivot extends SubsystemBase {
     // SmartDashboard.putNumber("FFvalue", feedforward.calculate(Math.toRadians(8.2), Math.toRadians(1)));
   }
 
+ @Override
+  public void periodic() {
+   }
+
   public void setPivotSetpoint(ArmConstants.ArmSetpoint armSetpoint) {
-    if (armSetpoint == ArmConstants.ArmSetpoint.One)
+     if (armSetpoint == ArmConstants.ArmSetpoint.One)
       pivotSetpoint = ArmConstants.kArmSetpoint1;
     if (armSetpoint == ArmConstants.ArmSetpoint.Two)
       pivotSetpoint = ArmConstants.kArmSetpoint2;
@@ -98,7 +100,7 @@ public class ArmPivot extends SubsystemBase {
       pivotSetpoint = ArmConstants.kArmSetpoint6;
     if (armSetpoint == ArmConstants.ArmSetpoint.Seven)
       pivotSetpoint = ArmConstants.kArmSetpoint7;
-  }
+   }
 
   public double getPivotSetpointPosition() {
     return pivotSetpoint;
@@ -110,19 +112,20 @@ public class ArmPivot extends SubsystemBase {
 
   public void pivotDaArm() {
     // set PID coefficients
-    kS = SmartDashboard.getNumber("kS", kS);
-    kG = SmartDashboard.getNumber("kG", kG);
-    kV = SmartDashboard.getNumber("kV", kV);
-    kP = SmartDashboard.getNumber("kP", kP);
-    kI = SmartDashboard.getNumber("kI", kI);
-    kD = SmartDashboard.getNumber("kD", kD);
-    SmartDashboard.putNumber("nkS", pivotSetpoint);
+   // kS = SmartDashboard.getNumber("kS", kS);
+   // kG = SmartDashboard.getNumber("kG", kG);
+   // kV = SmartDashboard.getNumber("kV", kV);
+   // kP = SmartDashboard.getNumber("kP", kP);
+   // kI = SmartDashboard.getNumber("kI", kI);
+   // kD = SmartDashboard.getNumber("kD", kD);
+   // SmartDashboard.putNumber("nkS", pivotSetpoint);
     pivotPIDController.setP(kP);
     pivotPIDController.setI(kI);
     pivotPIDController.setD(kD);
     feedforward.updateArmFeedforward(kS, kG, kV);
-    SmartDashboard.putNumber("FFvalue", feedforward.calculate(Math.toRadians(pivotSetpoint), Math.toRadians(1)));
+   // SmartDashboard.putNumber("FFvalue", feedforward.calculate(Math.toRadians(pivotSetpoint), Math.toRadians(1)));
     pivotPIDController.setReference(pivotSetpoint, CANSparkMax.ControlType.kPosition, 0,
         feedforward.calculate(Math.toRadians(pivotSetpoint), Math.toRadians(1)), ArbFFUnits.kVoltage);
+       
   }
 }
