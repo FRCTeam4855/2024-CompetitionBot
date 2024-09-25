@@ -125,12 +125,18 @@ public final class Constants {
     public static final int kOperatorControllerPort2 = 3;
     public static final double kDriveDeadband = 0.1;
     public static final double kRotateScale = 0.5;
-    public static final int kJS_Trigger = 1;
+    public static final int kJS_Trigger = 1;  //KJS = Konstants Joystick
+    public static final int kJS_RB = 4;
+    public static final int kJS_BB = 2;
+    public static final int kJS_LB = 3;
     public static final double kSpeedMultiplierDefault = 1;   // the default speed when no accessory buttons are held down
     public static final double kSpeedMultiplierPrecise = 0.5; // the speed when the trigger is held down for precise movements
 
-    public static final int kGyroReset_Start = 4;
-    public static final int kFieldOrientedToggle_LB = 5;
+    //driver buttons
+    public static final int kGyroReset_Start = 3;
+    public static final int kFieldOrientedToggle_LB = 4;
+
+    //operator buttons
     public static final int kIntakePickup_LB = 5;
     public static final int kIntakeStop_Back = 7;
     public static final int kIntakeDrop_RB = 6;

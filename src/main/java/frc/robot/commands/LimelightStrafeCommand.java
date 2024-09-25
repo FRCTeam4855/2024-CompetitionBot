@@ -18,9 +18,9 @@ public class LimelightStrafeCommand extends Command {
 
     public void execute() {
         if (limelight.xvalue >= 2) {
-            drive.strafeRight();
-        } else if (limelight.xvalue <= -2) {
             drive.strafeLeft();
+        } else if (limelight.xvalue <= -2) {
+            drive.strafeRight();
         }
     }
 

@@ -25,6 +25,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.ArmPivot;
 import frc.robot.commands.ArmSetpointCommand;
+import frc.robot.commands.ClimberControlCommand;
 import frc.robot.commands.IntakeDropCommand;
 import frc.robot.commands.IntakePickupCommand;
 import frc.robot.commands.IntakeStopCommand;
@@ -101,23 +102,32 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
     
-       new JoystickButton(m_rightDriverController,16)
-       .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
+////    Driver Controls
+
+       new JoystickButton(m_leftDriverController,OIConstants.kJS_BB)
+            .whileTrue(new RunCommand(
+                () -> m_robotDrive.setX(),
+                m_robotDrive));
+
+        new JoystickButton(m_rightDriverController,OIConstants.kJS_LB)
+            .whileTrue(new RunCommand(
+                () -> m_robotDrive.strafeLeft(),
+                m_robotDrive));
+
+        new JoystickButton(m_rightDriverController,OIConstants.kJS_RB)
+            .whileTrue(new RunCommand(
+                () -> m_robotDrive.strafeRight(),
+                m_robotDrive));
        
-       
-        new JoystickButton(m_leftDriverController, OIConstants.kGyroReset_Start).debounce(0.1)  //Gyro reset
+        new JoystickButton(m_leftDriverController, OIConstants.kJS_RB).debounce(0.1)  //Gyro reset
             .whileTrue(new InstantCommand(
                 () -> m_robotDrive.zeroHeading(),
                 m_robotDrive)); 
         
-    /*    new JoystickButton(m_rightDriverController, 3) // limelight line up
-            .whileTrue(new RunCommand(
-                () -> new LimelightStrafeCommand(m_robotDrive, m_limelight),
-                m_robotDrive, m_limelight));
-*/
-        new JoystickButton(m_rightDriverController, OIConstants.kFieldOrientedToggle_LB)  //Field oriented toggle
+        new JoystickButton(m_rightDriverController, OIConstants.kJS_BB) // limelight line up
+            .whileTrue(new LimelightStrafeCommand(m_robotDrive, m_limelight));
+
+        new JoystickButton(m_leftDriverController, OIConstants.kJS_LB)  //Field oriented toggle
             .whileTrue(new InstantCommand(
                 () -> toggleFieldOriented()));
         
@@ -135,6 +145,8 @@ public class RobotContainer {
         new JoystickButton(m_rightDriverController, OIConstants.kJS_Trigger) //Return arm to transit position
             .onFalse(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four));
 
+////    Operator Controls 
+ 
         new JoystickButton(m_operatorController1, OIConstants.kIntakePickup_LB) // Runs the Intake
             .onTrue(new IntakePickupCommand(m_intake));
 
@@ -143,6 +155,13 @@ public class RobotContainer {
 
         new JoystickButton(m_operatorController1, OIConstants.kIntakeDrop_RB)   // Reverses the Intake
             .onTrue(new IntakeDropCommand(m_intake));
+
+        new JoystickButton(m_operatorController1, 8)
+                .onTrue(new FlywheelStartCommand(m_flyWheel));
+        
+        new JoystickButton(m_operatorController1, 9)
+                .onTrue(new FlywheelStopCommand(m_flyWheel));
+            
 
         new JoystickButton(m_operatorController1, OIConstants.kArmSetpoint1Button_A)            // Sets the Arm to intake position
                                                                                                 // and runs the intake
@@ -153,6 +172,10 @@ public class RobotContainer {
         new JoystickButton(m_operatorController1, OIConstants.kArmSetpoint4Button_B)  // Transit Position
             .onFalse(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four));
 
+        /*
+        new JoystickButton(m_operatorController1, OIConstants.) 
+            .onFalse(new ClimberControlCommand()); 
+        */
         new JoystickButton(m_operatorController1, OIConstants.kArmSetpoint3Button_X)            // Goes to amp position and runs the flywheel and intake.
             .onTrue(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Three)
                 .alongWith(new FlywheelStartCommand(m_flyWheel))
@@ -170,8 +193,8 @@ public class RobotContainer {
                 .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four)));
                   }
             /*TODO
-             * Flywheel start/stop command+button
-             * test limelight button
+             * Flywheel start/stop command+button DONE
+             * test limelight button DONE
              * redo button numbering for new joysticks
              * Climber command+button
              * Integrate LEDs to commands

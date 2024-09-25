@@ -38,7 +38,6 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
    
-
     m_chooser.setDefaultOption("1. Straight Ahead", OIConstants.kAuton1);
     m_chooser.addOption("2. S Pattern", OIConstants.kAuton2);
     m_chooser.addOption("3. S with a twist", OIConstants.kAuton3);
@@ -49,7 +48,6 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("8. Rat", OIConstants.kAuton8);
     m_chooser.addOption("9. G>^v", OIConstants.kAuton9);
    SmartDashboard.putData(m_chooser);
-  
   }
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
