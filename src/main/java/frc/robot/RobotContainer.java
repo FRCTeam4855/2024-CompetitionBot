@@ -42,7 +42,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.List;
 
@@ -92,8 +91,6 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_rightDriverController.getRawAxis(0) * speedMultiplier, OIConstants.kDriveDeadband) * OIConstants.kRotateScale,
                 fieldOriented, true),
             m_robotDrive));
-
-        m_armPivot.initPivot();
                        
     }
 
@@ -158,8 +155,10 @@ public class RobotContainer {
         m_operatorController1.rightBumper().onTrue(new IntakeDropCommand(m_intake));    //Runs the intake in reverse
         m_operatorController1.start().onTrue(new FlywheelStartCommand(m_flyWheel));     //Starts the Flywheel
         m_operatorController1.leftStick().onTrue(new FlywheelStopCommand(m_flyWheel));  //Stops the Flywheel
-        //m_operatorController1.axisGreaterThan(1, 0.5).whileTrue(new ClimberControlCommand(m_ClimberSubsystem)); //TODO figure out why this command isn't working. Syntax works for other commands
-        m_operatorController1.a()   //Lowers arm, starts intake, raises arm when sensor triggered
+        m_operatorController1.axisGreaterThan(1, 0.5)
+            .whileTrue(new ClimberControlCommand(m_climberSubsystem,.5))
+            .onFalse(new ClimberControlCommand(m_climberSubsystem, 0));  
+       m_operatorController1.a()   //Lowers arm, starts intake, raises arm when sensor triggered
             .onTrue(new ArmSetpointCommand(m_armPivot, ArmSetpoint.One)
             .alongWith(new IntakePickupCommand(m_intake))
             .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four)));
@@ -177,60 +176,16 @@ public class RobotContainer {
                     .andThen(new IntakeStopCommand(m_intake))                
                     .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four)));
 
- /*      
-        new JoystickButton(m_operatorController1, OIConstants.kIntakePickup_LB) // Runs the Intake
-            .onTrue(new IntakePickupCommand(m_intake));
-
-        new JoystickButton(m_operatorController1, OIConstants.kIntakeStop_Back) // Stops the Intake
-            .onTrue(new IntakeStopCommand(m_intake));
-
-       new JoystickButton(m_operatorController1, OIConstants.kIntakeDrop_RB)   // Reverses the Intake
-            .onTrue(new IntakeDropCommand(m_intake));
-
-        new JoystickButton(m_operatorController1, 8)
-                .onTrue(new FlywheelStartCommand(m_flyWheel));
-        
-        new JoystickButton(m_operatorController1, 9)
-                .onTrue(new FlywheelStopCommand(m_flyWheel));
-
-
-            
-
-        new JoystickButton(m_operatorController1, OIConstants.kArmSetpoint1Button_A)            // Sets the Arm to intake position
-                                                                                                // and runs the intake
-            .onTrue(new ArmSetpointCommand(m_armPivot, ArmSetpoint.One)
-                .alongWith(new IntakePickupCommand(m_intake))
-                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four)));
-
-        new JoystickButton(m_operatorController1, OIConstants.kArmSetpoint4Button_B)  // Transit Position
-            .onFalse(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four));
-
-        
-        new JoystickButton(m_operatorController1, OIConstants.kArmSetpoint3Button_X)            // Goes to amp position and runs the flywheel and intake.
-            .onTrue(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Three)
-                .alongWith(new FlywheelStartCommand(m_flyWheel))
-                .andThen(new IntakeDeliverCommand(m_intake))
-                .andThen(new IntakeStopCommand(m_intake))
-                .andThen(new FlywheelStopCommand(m_flyWheel))
-                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four)));
-
-        new JoystickButton(m_operatorController1, OIConstants.kArmSetpoint2Button_Y)            // Goes to speaker position and runs the flywheel and intake.
-            .onTrue(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
-                .alongWith(new FlywheelStartCommand(m_flyWheel))
-                .andThen(new IntakeDeliverCommand(m_intake))
-                .andThen(new FlywheelStopCommand(m_flyWheel))
-                .andThen(new IntakeStopCommand(m_intake))                
-                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four)));
-    */         }
+          }
             /*TODO
              * Flywheel start/stop command+button DONE
              * test limelight button DONE
-             * redo button numbering for new joysticks
-             * Climber command+button
+             * redo button numbering for new joysticks DONE
+             * Climber command+button DONE
              * Integrate LEDs to commands
              * Investigate loop overruns
              * Remove dead code blocks
-             * Find a cleaner way to declare these buttons and commands
+             * Find a cleaner way to declare these buttons and commands DONE
              * Look at switch statements for defining lists of things (buttons, autons, setpoints, etc.)
              * Program autons
              * Autons with pathweaver
@@ -247,7 +202,7 @@ public class RobotContainer {
     private void toggleFieldOriented () {
         fieldOriented = !fieldOriented;
     }
-    
+
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *

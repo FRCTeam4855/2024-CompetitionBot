@@ -34,16 +34,7 @@ public class ArmPivot extends SubsystemBase {
  
   // unnecessary manual controls, not needed when using setpoint control
 
-  public double getPivotPosition() {
-       return(m_pivotEncoder.getPosition());
-    //return (rawPosition);
-    //return ((rawPosition+zeroOffset)%360);
-    // if (rawPosition - zeroOffset >= 0)
-    //   return (rawPosition - zeroOffset);
-    // else
-    //   return (rawPosition - zeroOffset + 360);
-  }
-public void initPivot() {
+public ArmPivot() {
     // PID coefficients
     m_armPivot.restoreFactoryDefaults();
     m_armPivot.setIdleMode(IdleMode.kBrake);
@@ -80,6 +71,18 @@ public void initPivot() {
     // SmartDashboard.putNumber("kD", kD);
     // SmartDashboard.putNumber("FFvalue", feedforward.calculate(Math.toRadians(8.2), Math.toRadians(1)));
   }
+
+  public double getPivotPosition() {
+       return(m_pivotEncoder.getPosition());
+    //return (rawPosition);
+    //return ((rawPosition+zeroOffset)%360);
+    // if (rawPosition - zeroOffset >= 0)
+    //   return (rawPosition - zeroOffset);
+    // else
+    //   return (rawPosition - zeroOffset + 360);
+  }
+
+
 
  @Override
   public void periodic() {
