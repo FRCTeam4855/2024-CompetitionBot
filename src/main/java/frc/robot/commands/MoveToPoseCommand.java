@@ -19,17 +19,19 @@ public class MoveToPoseCommand extends Command{
     private double x;
     private double y;
     private double rotation;
+    private boolean stop;
 
     Trajectory k_trajectory;
     SwerveControllerCommand swerveControllerCommand;
     DriveSubsystem m_robotDrive;
     TrajectoryConfig config;
     
-    public MoveToPoseCommand(DriveSubsystem m_robotDrive, double x, double y, double rotation) {
+    public MoveToPoseCommand(DriveSubsystem m_robotDrive, double x, double y, double rotation, boolean stop) {
         this.x = x;
         this.y = y;
         this.rotation = rotation;
         this.m_robotDrive = m_robotDrive;
+        this.stop = stop;
     }
 
     public void initialize(){
@@ -63,7 +65,11 @@ public class MoveToPoseCommand extends Command{
         // Reset odometry to the starting pose of the trajectory.
         m_robotDrive.resetOdometry(k_trajectory.getInitialPose());
 
-        swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+        if (stop){
+            swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+        } else {
+            swerveControllerCommand.andThen();
+        }
     }
 
     public void execute(){

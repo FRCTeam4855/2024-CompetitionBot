@@ -283,7 +283,7 @@ public class RobotContainer {
             break;
 
             case OIConstants.kAuton9:
-                return ((new MoveToPoseCommand(m_robotDrive, 1.5, 0, 90)));
+                return ((new MoveToPoseCommand(m_robotDrive, 1.5, 0, 90, true)));
                 /*return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
                 .andThen(new FlywheelStartCommand(m_flyWheel))
                 .andThen(new IntakeDeliverCommand(m_intake))
