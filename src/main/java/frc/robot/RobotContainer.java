@@ -38,10 +38,12 @@ import frc.robot.commands.LimelightStrafeCommand;
 import frc.robot.commands.FlywheelStartCommand;
 import frc.robot.commands.FlywheelStopCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.MoveToPoseCommand;
 
 import java.util.List;
 
@@ -282,10 +284,22 @@ public class RobotContainer {
             break;
 
             case OIConstants.kAuton9:
-                k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0,
-                    new Rotation2d(0)),List.of(new Translation2d(-2,0 ),new Translation2d(-3, -1.25)), new Pose2d(-1, -3,
-                    new Rotation2d(Math.toRadians(-45))),config);
-            break;
+                return ((new MoveToPoseCommand(m_robotDrive, 1.5, 0, 90)));
+                /*return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
+                .andThen(new FlywheelStartCommand(m_flyWheel))
+                .andThen(new IntakeDeliverCommand(m_intake))
+                .andThen(new FlywheelStopCommand(m_flyWheel))
+                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.One))
+                .andThen(new IntakeInputCommand(m_intake))
+                .alongWith(new MoveToPoseCommand(m_robotDrive, 1.5, 0, 90))));*/
+            /*CommandScheduler.getInstance()
+            .schedule((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
+                .andThen(new FlywheelStartCommand(m_flyWheel))
+                .andThen(new IntakeDeliverCommand(m_intake))
+                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.One))
+                .andThen(new IntakeInputCommand(m_intake))
+                .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, 0, 90))));*/
+            //break;
 
             default:
                 k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0,
