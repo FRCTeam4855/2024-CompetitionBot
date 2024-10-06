@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -20,11 +21,13 @@ public class MoveToPoseCommand extends Command{
     private double y;
     private double rotation;
     private boolean stop;
+    private final Timer m_timer = new Timer();
 
     Trajectory k_trajectory;
     SwerveControllerCommand swerveControllerCommand;
     DriveSubsystem m_robotDrive;
     TrajectoryConfig config;
+
     
     public MoveToPoseCommand(DriveSubsystem m_robotDrive, double x, double y, double rotation, boolean stop) {
         this.x = x;
@@ -32,10 +35,11 @@ public class MoveToPoseCommand extends Command{
         this.rotation = rotation;
         this.m_robotDrive = m_robotDrive;
         this.stop = stop;
+        addRequirements(m_robotDrive);
     }
 
+    @Override
     public void initialize(){
-
         var thetaController = new ProfiledPIDController(
             AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
             thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -61,24 +65,31 @@ public class MoveToPoseCommand extends Command{
             thetaController,
             m_robotDrive::setModuleStates,
             m_robotDrive);
-
+            
         // Reset odometry to the starting pose of the trajectory.
         m_robotDrive.resetOdometry(k_trajectory.getInitialPose());
+        
+        m_timer.restart();
 
-        if (stop){
-            swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
-        } else {
-            swerveControllerCommand.andThen();
-        }
+        //if (stop){
+          //swerveControllerCommand.andThen(() -> m_robotDrive.drive(.5, .5, 0, false, false));
+        //} else {
+            swerveControllerCommand.schedule();
+        //}
     }
 
+    @Override
     public void execute(){
     }
 
-    public boolean isFinished(){
-        return true;
+    @Override
+    public void end(boolean interrupted) {
+        m_timer.stop();
     }
 
-    public void end(){  
+    @Override
+    public boolean isFinished(){
+        return m_timer.hasElapsed(k_trajectory.getTotalTimeSeconds());
     }
+
 }

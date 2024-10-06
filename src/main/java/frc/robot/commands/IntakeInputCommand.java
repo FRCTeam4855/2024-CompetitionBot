@@ -9,6 +9,7 @@ public class IntakeInputCommand extends Command {
 
     public IntakeInputCommand(IntakeSubsystem thisIntake) {
         Intake = thisIntake;
+        addRequirements(thisIntake);
     }
 
     public void initialize() {

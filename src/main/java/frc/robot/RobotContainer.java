@@ -236,7 +236,7 @@ public class RobotContainer {
                 m_robotDrive);  //This clears a compiler error, but is overwritten later*/
 
         switch (routineString){
-            case OIConstants.kAuton1:
+            /*case OIConstants.kAuton1:
                 k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 1,
                     new Rotation2d(0)),List.of(),new Pose2d(3, 1, new Rotation2d(0)),config);
             break;
@@ -280,17 +280,22 @@ public class RobotContainer {
                 k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0,
                     new Rotation2d(0)),List.of(new Translation2d(-2,0 )), new Pose2d(-3, -1,
                     new Rotation2d(Math.toRadians(-135))),config);
-            break;
+            break;*/
 
             case OIConstants.kAuton9:
-                return ((new MoveToPoseCommand(m_robotDrive, 1.5, 0, 90, true)));
-                /*return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
+            System.out.printf("In Auton9\n");            
+                return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
                 .andThen(new FlywheelStartCommand(m_flyWheel))
                 .andThen(new IntakeDeliverCommand(m_intake))
                 .andThen(new FlywheelStopCommand(m_flyWheel))
-                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.One))
+                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.One))  
                 .andThen(new IntakeInputCommand(m_intake))
-                .alongWith(new MoveToPoseCommand(m_robotDrive, 1.5, 0, 90))));*/
+                .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, 0, 90, true))
+                .andThen(new MoveToPoseCommand(m_robotDrive, -1.5, 0, -90, true))
+                .alongWith(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two))
+                .alongWith(new FlywheelStartCommand(m_flyWheel))
+                .andThen(new IntakeDeliverCommand(m_intake))
+                .andThen(new FlywheelStopCommand(m_flyWheel))));
             /*CommandScheduler.getInstance()
             .schedule((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
                 .andThen(new FlywheelStartCommand(m_flyWheel))
@@ -304,6 +309,7 @@ public class RobotContainer {
                 k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0,
                     new Rotation2d(0)),List.of(), new Pose2d(0, 0,
                     new Rotation2d(Math.toRadians(0))),config);
+                return new FlywheelStartCommand(m_flyWheel);
         }
 
             /*k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(1, 2,
@@ -326,7 +332,7 @@ public class RobotContainer {
             //  config);
 
     
-        swerveControllerCommand = new SwerveControllerCommand(
+        /*swerveControllerCommand = new SwerveControllerCommand(
             k_trajectory,
             m_robotDrive::getPose, // Functional interface to feed supplier
             DriveConstants.kDriveKinematics,
@@ -336,13 +342,13 @@ public class RobotContainer {
             new PIDController(AutoConstants.kPYController, 0, 0),
             thetaController,
             m_robotDrive::setModuleStates,
-            m_robotDrive);
+            m_robotDrive);*/
 
 
         // Reset odometry to the starting pose of the trajectory.
-        m_robotDrive.resetOdometry(k_trajectory.getInitialPose());
+        //m_robotDrive.resetOdometry(k_trajectory.getInitialPose());
 
         // Run path following command, then stop at the end.
-        return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+        /*return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));*/
     }
 }

@@ -9,6 +9,7 @@ public class FlywheelStartCommand extends Command {
 
     public FlywheelStartCommand(FlywheelSubsystem thisLauncherFlywheel) {
         Launcher = thisLauncherFlywheel;
+        addRequirements(thisLauncherFlywheel);
     }
 
     public void initialize() {
