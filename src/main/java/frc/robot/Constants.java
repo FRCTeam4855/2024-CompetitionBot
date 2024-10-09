@@ -145,15 +145,11 @@ public final class Constants {
     public static final int kArmSetpoint3Button_X = 3;
     public static final int kArmSetpoint2Button_Y = 4;
 
-    public static final String kAuton1 = "1. Straight Ahead";
-    public static final String kAuton2 = "2. S Pattern";
-    public static final String kAuton3 = "3. S with a twist";
-    public static final String kAuton4 = "4. Show Off";
-    public static final String kAuton5 = "5. Rotating Fish";
-    public static final String kAuton6 = "6. Maryland Hat";
-    public static final String kAuton7 = "7. Trash";
-    public static final String kAuton8 = "8. Rat";
-    public static final String kAuton9 = "9. G>^v";
+    public static final String kAuton1 = "1. Front Speaker Two Note";
+    public static final String kAuton2 = "2. Front Speaker Launch & Leave";
+    public static final String kAuton3 = "3. Source Side Leave";
+    public static final String kAuton4 = "4. Blue Amp Side Leave";
+    public static final String kAuton5 = "5. Red Amp Side Leave";
   }
 
   public static final class ArmConstants {

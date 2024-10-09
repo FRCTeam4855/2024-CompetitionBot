@@ -236,66 +236,19 @@ public class RobotContainer {
                 m_robotDrive);  //This clears a compiler error, but is overwritten later*/
 
         switch (routineString){
-            /*case OIConstants.kAuton1:
-                k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 1,
-                    new Rotation2d(0)),List.of(),new Pose2d(3, 1, new Rotation2d(0)),config);
-            break;
-
-            case OIConstants.kAuton2:
-                k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 1,
-                    new Rotation2d(0)),List.of(new Translation2d(1, 2), new Translation2d(2, 0)),
-                    new Pose2d(3, 1, new Rotation2d(0)),config);
-            break;
-
-            case OIConstants.kAuton3:
-                k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 1,
-                    new Rotation2d(0)),List.of(new Translation2d(1, 2), new Translation2d(2, 0)),
-                    new Pose2d(3, 1, new Rotation2d(Math.toRadians(90))),config);
-            break;
-
-            case OIConstants.kAuton4:
-                k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 1,
-                    new Rotation2d(0)),List.of(),new Pose2d(1, 2, new Rotation2d(Math.toRadians(90))),config);
-            break;
-
-            case OIConstants.kAuton5:
-                k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(2, 1,
-                    new Rotation2d(0)),List.of(new Translation2d(-2,0)), new Pose2d(4, 1,
-                    new Rotation2d(Math.toRadians(180))),config);
-            break;
-
-            case OIConstants.kAuton6:
-                k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 1,
-                    new Rotation2d(0)),List.of(new Translation2d(1.5,.5)), new Pose2d(2.75, 1.4,
-                    new Rotation2d(Math.toRadians(0))),config);
-            break;
-
-            case OIConstants.kAuton7:
-                k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0,
-                    new Rotation2d(0)),List.of(new Translation2d(-1,0 )), new Pose2d(0, -2,
-                    new Rotation2d(Math.toRadians(-45))),config);
-            break;
-
-            case OIConstants.kAuton8:
-                k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0,
-                    new Rotation2d(0)),List.of(new Translation2d(-2,0 )), new Pose2d(-3, -1,
-                    new Rotation2d(Math.toRadians(-135))),config);
-            break;*/
-
-            case OIConstants.kAuton9:
-            System.out.printf("In Auton9\n");            
+            case OIConstants.kAuton1:         
                 return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
                 .andThen(new FlywheelStartCommand(m_flyWheel))
                 .andThen(new IntakeDeliverCommand(m_intake))
                 .andThen(new FlywheelStopCommand(m_flyWheel))
                 .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.One))  
-                .andThen(new IntakeInputCommand(m_intake))
-                .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, 0, 90, true))
-                .andThen(new MoveToPoseCommand(m_robotDrive, -1.5, 0, -90, true))
-                .alongWith(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two))
-                .alongWith(new FlywheelStartCommand(m_flyWheel))
+                .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, 0, 0, true))
+                .andThen(new IntakePickupCommand(m_intake))
+                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Six))
+                //.andThen(new MoveToPoseCommand(m_robotDrive, -1.5, 0, 0, true)) 
+                .andThen(new FlywheelStartCommand(m_flyWheel)))
                 .andThen(new IntakeDeliverCommand(m_intake))
-                .andThen(new FlywheelStopCommand(m_flyWheel))));
+                .andThen(new FlywheelStopCommand(m_flyWheel)));
             /*CommandScheduler.getInstance()
             .schedule((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
                 .andThen(new FlywheelStartCommand(m_flyWheel))
@@ -304,12 +257,40 @@ public class RobotContainer {
                 .andThen(new IntakeInputCommand(m_intake))
                 .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, 0, 90))));*/
             //break;
+            case OIConstants.kAuton2:
+            return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
+            .andThen(new FlywheelStartCommand(m_flyWheel))
+            .andThen(new IntakeDeliverCommand(m_intake))
+            .andThen(new FlywheelStopCommand(m_flyWheel))
+            .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Six))
+            .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, 0, 0, true))));
+
+            case OIConstants.kAuton3:
+                return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
+                .andThen(new FlywheelStartCommand(m_flyWheel))
+                .andThen(new IntakeDeliverCommand(m_intake))
+                .andThen(new FlywheelStopCommand(m_flyWheel))
+                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Six))
+                .andThen(new MoveToPoseCommand(m_robotDrive, 3.5, 0, 0, true))));
+
+            case OIConstants.kAuton4:
+                return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
+                .andThen(new FlywheelStartCommand(m_flyWheel))
+                .andThen(new IntakeDeliverCommand(m_intake))
+                .andThen(new FlywheelStopCommand(m_flyWheel))
+                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Six))
+                .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, -.5, 0, true))));
+
+            case OIConstants.kAuton5:
+                return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
+                .andThen(new FlywheelStartCommand(m_flyWheel))
+                .andThen(new IntakeDeliverCommand(m_intake))
+                .andThen(new FlywheelStopCommand(m_flyWheel))
+                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Six))
+                .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, .5, 0, true))));
 
             default:
-                k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0,
-                    new Rotation2d(0)),List.of(), new Pose2d(0, 0,
-                    new Rotation2d(Math.toRadians(0))),config);
-                return new FlywheelStartCommand(m_flyWheel);
+                return (new MoveToPoseCommand(m_robotDrive, 0, 0, 0, true));
         }
 
             /*k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(1, 2,

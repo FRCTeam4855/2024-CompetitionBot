@@ -35,7 +35,7 @@ public class MoveToPoseCommand extends Command{
         this.rotation = rotation;
         this.m_robotDrive = m_robotDrive;
         this.stop = stop;
-        addRequirements(m_robotDrive);
+        //addRequirements(m_robotDrive);
     }
 
     @Override

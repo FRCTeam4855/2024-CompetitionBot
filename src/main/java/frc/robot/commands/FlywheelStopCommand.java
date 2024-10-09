@@ -9,7 +9,7 @@ public class FlywheelStopCommand extends Command {
 
     public FlywheelStopCommand(FlywheelSubsystem thisLauncherFlywheel) {
         Launcher = thisLauncherFlywheel;
-        addRequirements(thisLauncherFlywheel);
+        //addRequirements(thisLauncherFlywheel);
     }
 
     public void initialize() {

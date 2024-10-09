@@ -38,15 +38,11 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
    
-    m_chooser.setDefaultOption("1. Straight Ahead", OIConstants.kAuton1);
-    m_chooser.addOption("2. S Pattern", OIConstants.kAuton2);
-    m_chooser.addOption("3. S with a twist", OIConstants.kAuton3);
-    m_chooser.addOption("4. Show Off", OIConstants.kAuton4);
-    m_chooser.addOption("5. Rotating Fish", OIConstants.kAuton5);
-    m_chooser.addOption("6. Maryland Hat", OIConstants.kAuton6);
-    m_chooser.addOption("7. Trash", OIConstants.kAuton7);
-    m_chooser.addOption("8. Rat", OIConstants.kAuton8);
-    m_chooser.addOption("9. G>^v", OIConstants.kAuton9);
+    m_chooser.setDefaultOption(OIConstants.kAuton1, OIConstants.kAuton1);
+    m_chooser.addOption(OIConstants.kAuton2, OIConstants.kAuton2);
+    m_chooser.addOption(OIConstants.kAuton3, OIConstants.kAuton3);
+    m_chooser.addOption(OIConstants.kAuton4, OIConstants.kAuton4);
+    m_chooser.addOption(OIConstants.kAuton5, OIConstants.kAuton5);
    SmartDashboard.putData(m_chooser);
   }
   /**
