@@ -279,7 +279,7 @@ public class RobotContainer {
                 .andThen(new IntakeDeliverCommand(m_intake))
                 .andThen(new FlywheelStopCommand(m_flyWheel))
                 .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Six))
-                .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, -.5, 0, true))));
+                .andThen(new MoveToPoseCommand(m_robotDrive, 1.0, -2.0, 0, true))));
 
             case OIConstants.kAuton5:
                 return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
@@ -287,7 +287,7 @@ public class RobotContainer {
                 .andThen(new IntakeDeliverCommand(m_intake))
                 .andThen(new FlywheelStopCommand(m_flyWheel))
                 .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Six))
-                .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, .5, 0, true))));
+                .andThen(new MoveToPoseCommand(m_robotDrive, 1.0, 2.0, 0, true))));
 
             default:
                 return (new MoveToPoseCommand(m_robotDrive, 0, 0, 0, true));
