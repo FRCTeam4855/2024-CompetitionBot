@@ -13,7 +13,7 @@ public class ArmSetpointCommand extends Command {
 
         this.armPivot = armPivot;
         this.goalArmSetpoint = goalArmSetpoint;
-        //addRequirements(armPivot);
+        addRequirements(armPivot);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
