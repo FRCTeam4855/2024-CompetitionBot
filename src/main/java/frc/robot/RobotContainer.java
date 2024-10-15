@@ -157,7 +157,7 @@ public class RobotContainer {
         m_operatorController1.start().onTrue(new FlywheelStartCommand(m_flyWheel));     //Starts the Flywheel
         m_operatorController1.leftStick().onTrue(new FlywheelStopCommand(m_flyWheel));  //Stops the Flywheel
         m_operatorController1.axisGreaterThan(1, 0.5)
-            .whileTrue(new ClimberControlCommand(m_climberSubsystem,.5))
+            .whileTrue(new ClimberControlCommand(m_climberSubsystem,.7))
             .onFalse(new ClimberControlCommand(m_climberSubsystem, 0));  
        m_operatorController1.a()   //Lowers arm, starts intake, raises arm when sensor triggered
             .onTrue(new ArmSetpointCommand(m_armPivot, ArmSetpoint.One)
