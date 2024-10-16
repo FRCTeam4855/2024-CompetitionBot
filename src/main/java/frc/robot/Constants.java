@@ -150,6 +150,7 @@ public final class Constants {
     public static final String kAuton3 = "3. Source Side Leave";
     public static final String kAuton4 = "4. Blue Amp Side Leave";
     public static final String kAuton5 = "5. Red Amp Side Leave";
+    public static final String kAuton6 = "6. Test Sequential Command";
   }
 
   public static final class ArmConstants {

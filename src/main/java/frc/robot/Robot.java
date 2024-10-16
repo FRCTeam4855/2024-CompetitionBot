@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption(OIConstants.kAuton3, OIConstants.kAuton3);
     m_chooser.addOption(OIConstants.kAuton4, OIConstants.kAuton4);
     m_chooser.addOption(OIConstants.kAuton5, OIConstants.kAuton5);
+    m_chooser.addOption(OIConstants.kAuton6, OIConstants.kAuton6);
    SmartDashboard.putData(m_chooser);
   }
   /**

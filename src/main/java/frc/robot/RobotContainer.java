@@ -43,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.MoveToPoseCommand;
+import frc.robot.commands.SeqAuto;
 
 import java.util.List;
 
@@ -288,6 +289,9 @@ public class RobotContainer {
                 .andThen(new FlywheelStopCommand(m_flyWheel))
                 .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Six))
                 .andThen(new MoveToPoseCommand(m_robotDrive, 1.0, 2.0, 0, true))));
+
+            case OIConstants.kAuton6:
+                return new SeqAuto(m_robotDrive, m_armPivot, m_flyWheel, m_intake);
 
             default:
                 return (new MoveToPoseCommand(m_robotDrive, 0, 0, 0, true));
