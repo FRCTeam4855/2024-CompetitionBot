@@ -11,6 +11,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -34,9 +35,9 @@ public class SeqAuto extends SequentialCommandGroup {
     SwerveControllerCommand swerveControllerCommand;
     SwerveControllerCommand swerveControllerCommand2;
     TrajectoryConfig config;
-    Pose2d startPose = new Pose2d(0, 0, new Rotation2d(0));
-    Pose2d pose1 = new Pose2d(1 , 0, new Rotation2d(0));
-    Pose2d pose2 = new Pose2d(0 , 1, new Rotation2d(0));
+    Pose2d startPose = new Pose2d(0, 0, new Rotation2d(0)); //X + is Forward, Y positve is Left
+    Pose2d pose1 = new Pose2d(0 , 1, new Rotation2d(0));
+    Pose2d pose2 = new Pose2d(0 , 0, new Rotation2d(0));
 public SeqAuto(DriveSubsystem driveSubsystem, ArmPivot armPivot, FlywheelSubsystem flywheelSubsystem, IntakeSubsystem intakeSubsystem){
     
     addRequirements(driveSubsystem, armPivot, flywheelSubsystem, intakeSubsystem);
@@ -54,14 +55,16 @@ public SeqAuto(DriveSubsystem driveSubsystem, ArmPivot armPivot, FlywheelSubsyst
       
      
         config = new TrajectoryConfig(
-            AutoConstants.kMaxSpeedMetersPerSecond,
-            AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
+           1.0, //AutoConstants.kMaxSpeedMetersPerSecond,
+            1.0)   //AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+                // Add kinematics to ensure max speed is actually obeyed
             .setKinematics(DriveConstants.kDriveKinematics);
-    
-        k_trajectory = TrajectoryGenerator.generateTrajectory(startPose, List.of(), pose1, config);
+        //setReversed needs to be specified if the resultant X motion (fore/aft) is negative. It does NOT reverse the values.
+        k_trajectory = TrajectoryGenerator.generateTrajectory(startPose, List.of(), pose1, config.setReversed(false));
         
-        k_trajectory_2 = TrajectoryGenerator.generateTrajectory(pose1, List.of(), pose2, config);
+        //Use startPose as the first pose to move relative to the robot position, use the end point of the previous trajectory.
+        //You can use pathplanner to find field coordinates easily
+        k_trajectory_2 = TrajectoryGenerator.generateTrajectory(pose1, List.of(), pose2, config.setReversed(false)); 
 
         swerveControllerCommand = new SwerveControllerCommand(
             k_trajectory,
@@ -76,7 +79,7 @@ public SeqAuto(DriveSubsystem driveSubsystem, ArmPivot armPivot, FlywheelSubsyst
         m_robotDrive.resetOdometry(k_trajectory.getInitialPose());
    
         swerveControllerCommand2 = new SwerveControllerCommand(
-            k_trajectory,
+            k_trajectory_2,
             m_robotDrive::getPose, // Functional interface to feed supplier
             DriveConstants.kDriveKinematics,
             // Position controllers
@@ -94,18 +97,19 @@ public SeqAuto(DriveSubsystem driveSubsystem, ArmPivot armPivot, FlywheelSubsyst
         new FlywheelStopCommand(m_flyWheel),
         new ParallelCommandGroup(
             new ArmSetpointCommand(m_armPivot, ArmSetpoint.One),
-            //new IntakeInputCommand(m_intake),
-            new MoveToPoseCommand(m_robotDrive, 1.5, 0, 0, true)
+            new IntakePickupCommand(m_intake),
+            swerveControllerCommand
             ),
-        new MoveToPoseCommand(m_robotDrive, 0, 1.5, 0, true)
+        swerveControllerCommand2
     );
-    */
-    
+ */   
+    new ArmSetpointCommand(m_armPivot, ArmSetpoint.Five),
     swerveControllerCommand,
+    //new InstantCommand(()->m_robotDrive.resetOdometry(k_trajectory.getInitialPose())),
     new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two),
     swerveControllerCommand2
     );
-
+    
 }
 
     
