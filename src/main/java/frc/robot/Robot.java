@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.commands.FollowPathCommand;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,6 +47,8 @@ public class Robot extends TimedRobot {
     m_chooser.addOption(OIConstants.kAuton5, OIConstants.kAuton5);
     m_chooser.addOption(OIConstants.kAuton6, OIConstants.kAuton6);
    SmartDashboard.putData(m_chooser);
+
+   FollowPathCommand.warmupCommand().schedule();
   }
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
@@ -78,7 +82,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putString("Current Auton:", m_autoSelectedString);
 
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand(m_autoSelectedString);
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();//m_autoSelectedString);
     /*switch(autoSelected) {
       case "My Auto":
         autonomousCommand = new MyAutoCommand();

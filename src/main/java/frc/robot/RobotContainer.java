@@ -47,6 +47,9 @@ import frc.robot.commands.SeqAuto;
 
 import java.util.List;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.auto.NamedCommands;
+
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -79,6 +82,8 @@ public class RobotContainer {
     * The container for the robot. Contains subsystems, OI devices, and commands.
     */
     public RobotContainer() {
+        //Register Named Commands
+        NamedCommands.registerCommand("FlywheelStart",new FlywheelStartCommand(m_flyWheel));
         // Configure the button bindings
         configureButtonBindings();
 
@@ -210,8 +215,9 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand(String routineString) {
-        // Create config for trajectory
+    public Command getAutonomousCommand() {
+        return new PathPlannerAuto("Example");
+    /*    // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
             AutoConstants.kMaxSpeedMetersPerSecond,
             AutoConstants.kMaxAccelerationMetersPerSecondSquared)
@@ -224,7 +230,7 @@ public class RobotContainer {
 
         Trajectory k_trajectory;  /* = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 1,
                 new Rotation2d(0)),List.of(),new Pose2d(3, 1, new Rotation2d(0)),config);  //This clears a compiler error, but is overwritten later*/
-        SwerveControllerCommand swerveControllerCommand; /* = new SwerveControllerCommand(k_trajectory,
+      /*  SwerveControllerCommand swerveControllerCommand; /* = new SwerveControllerCommand(k_trajectory,
                 m_robotDrive::getPose,
                 // Functional interface to feed supplier
                 DriveConstants.kDriveKinematics,
@@ -235,7 +241,7 @@ public class RobotContainer {
                 thetaController,
                 m_robotDrive::setModuleStates,
                 m_robotDrive);  //This clears a compiler error, but is overwritten later*/
-
+/*
         switch (routineString){
             case OIConstants.kAuton1:         
                 return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
@@ -258,6 +264,7 @@ public class RobotContainer {
                 .andThen(new IntakeInputCommand(m_intake))
                 .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, 0, 90))));*/
             //break;
+            /*
             case OIConstants.kAuton2:
             return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
             .andThen(new FlywheelStartCommand(m_flyWheel))
@@ -297,7 +304,7 @@ public class RobotContainer {
                 return (new MoveToPoseCommand(m_robotDrive, 0, 0, 0, true));
         }
 
-            /*k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(1, 2,
+       */     /*k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(1, 2,
                 new Rotation2d(0)),List.of(),new Pose2d(2, 0, new Rotation2d(0)),config);
             
 

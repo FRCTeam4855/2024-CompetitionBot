@@ -67,7 +67,7 @@ public class MoveToPoseCommand extends Command{
             m_robotDrive);
             
         // Reset odometry to the starting pose of the trajectory.
-        m_robotDrive.resetOdometry(k_trajectory.getInitialPose());
+        m_robotDrive.resetPose(k_trajectory.getInitialPose());
         
         m_timer.restart();
 
