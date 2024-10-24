@@ -28,7 +28,6 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
 
   private String m_autoSelectedString;
-  public SendableChooser<String> m_chooser = new SendableChooser<>();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -40,13 +39,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
    
-    m_chooser.setDefaultOption(OIConstants.kAuton1, OIConstants.kAuton1);
-    m_chooser.addOption(OIConstants.kAuton2, OIConstants.kAuton2);
-    m_chooser.addOption(OIConstants.kAuton3, OIConstants.kAuton3);
-    m_chooser.addOption(OIConstants.kAuton4, OIConstants.kAuton4);
-    m_chooser.addOption(OIConstants.kAuton5, OIConstants.kAuton5);
-    m_chooser.addOption(OIConstants.kAuton6, OIConstants.kAuton6);
-   SmartDashboard.putData(m_chooser);
+
 
    FollowPathCommand.warmupCommand().schedule();
   }
@@ -77,13 +70,11 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autoSelectedString=m_chooser.getSelected();
 
-    SmartDashboard.putString("Current Auton:", m_autoSelectedString);
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();//m_autoSelectedString);
     /*switch(autoSelected) {
-      case "My Auto":
+      case "My Auto
         autonomousCommand = new MyAutoCommand();
         break;
       case "Default Auto":

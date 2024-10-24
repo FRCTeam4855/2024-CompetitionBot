@@ -15,6 +15,8 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.robot.Constants.ArmConstants.ArmSetpoint;
@@ -45,12 +47,11 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.MoveToPoseCommand;
-import frc.robot.commands.SeqAuto;
 
 import java.util.List;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 
@@ -80,6 +81,7 @@ public class RobotContainer {
 
     public static boolean fieldOriented = false;
     public double speedMultiplier = OIConstants.kSpeedMultiplierDefault;
+    private final SendableChooser<Command> autoChooser;
 
     /**
     * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -98,6 +100,7 @@ public class RobotContainer {
             new IntakeDeliverCommand(m_intake), 
             new FlywheelStopCommand(m_flyWheel)));
         NamedCommands.registerCommand("ArmToTransit", new ArmSetpointCommand(m_armPivot, ArmConstants.ArmSetpoint.Four));
+        
         // Configure the button bindings
         configureButtonBindings();
 
@@ -112,7 +115,9 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_rightDriverController.getRawAxis(0) * speedMultiplier, OIConstants.kDriveDeadband) * OIConstants.kRotateScale,
                 fieldOriented, true),
             m_robotDrive));
-                       
+
+            autoChooser = AutoBuilder.buildAutoChooser(); 
+            SmartDashboard.putData("Auto Chooser", autoChooser);             
     }
 
     /**
@@ -224,15 +229,21 @@ public class RobotContainer {
         fieldOriented = !fieldOriented;
     }
 
+
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous
      */
+
+
     public Command getAutonomousCommand() {
+        return autoChooser.getSelected();
+
+
         //TODO Auto Chooser
         //TODO Build paths and Autos
-        return new PathPlannerAuto("B-1-2");
+        //return new PathPlannerAuto("B-1-2");
     /*    // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
             AutoConstants.kMaxSpeedMetersPerSecond,
