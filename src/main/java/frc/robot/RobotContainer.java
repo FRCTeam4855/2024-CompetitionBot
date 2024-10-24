@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.robot.Constants.ArmConstants.ArmSetpoint;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -39,7 +40,9 @@ import frc.robot.commands.FlywheelStartCommand;
 import frc.robot.commands.FlywheelStopCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.MoveToPoseCommand;
@@ -75,7 +78,7 @@ public class RobotContainer {
     CommandXboxController m_operatorController1 = new CommandXboxController(OIConstants.kOperatorControllerPort1);
     //XboxController m_operatorController2 = new XboxController(OIConstants.kOperatorControllerPort2);
 
-    public static boolean fieldOriented = true;
+    public static boolean fieldOriented = false;
     public double speedMultiplier = OIConstants.kSpeedMultiplierDefault;
 
     /**
@@ -83,7 +86,18 @@ public class RobotContainer {
     */
     public RobotContainer() {
         //Register Named Commands
-        NamedCommands.registerCommand("FlywheelStart",new FlywheelStartCommand(m_flyWheel));
+        //TODO Add commands that we will be using during auto to the named commands list
+        NamedCommands.registerCommand("Intake", new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                new ArmSetpointCommand(m_armPivot, ArmConstants.ArmSetpoint.One), 
+                new IntakePickupCommand(m_intake))));
+        NamedCommands.registerCommand("Launch", new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                new FlywheelStartCommand(m_flyWheel), 
+                new ArmSetpointCommand(m_armPivot, ArmConstants.ArmSetpoint.Two)),
+            new IntakeDeliverCommand(m_intake), 
+            new FlywheelStopCommand(m_flyWheel)));
+        NamedCommands.registerCommand("ArmToTransit", new ArmSetpointCommand(m_armPivot, ArmConstants.ArmSetpoint.Four));
         // Configure the button bindings
         configureButtonBindings();
 
@@ -216,7 +230,9 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new PathPlannerAuto("Example");
+        //TODO Auto Chooser
+        //TODO Build paths and Autos
+        return new PathPlannerAuto("B-1-2");
     /*    // Create config for trajectory
         TrajectoryConfig config = new TrajectoryConfig(
             AutoConstants.kMaxSpeedMetersPerSecond,
