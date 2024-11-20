@@ -19,6 +19,11 @@ public class IntakePickupCommand extends Command {
     public void execute() {
 
     }
+    @Override
+    public void end(boolean interrupted) {
+            Intake.IntakeStop();
+            Intake.IntakeRun();
+    }
 
     public boolean isFinished() {
         if (Intake.intakeSensor) {

@@ -66,8 +66,8 @@ public class Limelight extends SubsystemBase {
     pipeline.setNumber(1);
   }
  
-
-  public void updateDashboard() {
+@Override
+  public void periodic() {
     // ^^add this to robotPeriodic to run always
     // get the default instance of NetworkTables
     NetworkTableInstance inst = NetworkTableInstance.getDefault();

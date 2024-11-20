@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.Robot;
 
 public class IntakeDeliverCommand extends Command {
 
@@ -10,6 +9,7 @@ public class IntakeDeliverCommand extends Command {
 
     public IntakeDeliverCommand(IntakeSubsystem thisIntake) {
         Intake = thisIntake;
+        //addRequirements(thisIntake);
     }
 
     public void initialize() {

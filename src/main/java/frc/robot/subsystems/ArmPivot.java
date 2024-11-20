@@ -5,16 +5,11 @@ import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
 //import edu.wpi.first.math.controller.ArmFeedforward;
 import frc.robot.AdjArmFeedforward;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ArmSetpoint;
-import frc.robot.Constants.ModuleConstants;
-import frc.robot.AdjArmFeedforward;
-import static frc.robot.Constants.*;
+import frc.robot.Constants.ArmConstants;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 
@@ -35,21 +30,11 @@ public class ArmPivot extends SubsystemBase {
   double kI = 0;
   double kD = 0;
   AdjArmFeedforward feedforward = new AdjArmFeedforward(kS, kG, kV);
-
+ 
+ 
   // unnecessary manual controls, not needed when using setpoint control
 
-  public double getPivotPosition() {
-    double rawPosition;
-    return(m_pivotEncoder.getPosition());
-    //return (rawPosition);
-    //return ((rawPosition+zeroOffset)%360);
-    // if (rawPosition - zeroOffset >= 0)
-    //   return (rawPosition - zeroOffset);
-    // else
-    //   return (rawPosition - zeroOffset + 360);
-  }
-
-  public void initPivot() {
+public ArmPivot() {
     // PID coefficients
     m_armPivot.restoreFactoryDefaults();
     m_armPivot.setIdleMode(IdleMode.kBrake);
@@ -87,70 +72,63 @@ public class ArmPivot extends SubsystemBase {
     // SmartDashboard.putNumber("FFvalue", feedforward.calculate(Math.toRadians(8.2), Math.toRadians(1)));
   }
 
-  public void setPivotSetpoint(ArmSetpoint armSetpoint) {
-    if (armSetpoint == ArmSetpoint.One)
-      pivotSetpoint = kArmSetpoint1;
-    if (armSetpoint == ArmSetpoint.Two)
-      pivotSetpoint = kArmSetpoint2;
-    if (armSetpoint == ArmSetpoint.Three)
-      pivotSetpoint = kArmSetpoint3;
-    if (armSetpoint == ArmSetpoint.Four)
-      pivotSetpoint = kArmSetpoint4;
-    if (armSetpoint == ArmSetpoint.Five)
-      pivotSetpoint = kArmSetpoint5;
-    if (armSetpoint == ArmSetpoint.Six)
-      pivotSetpoint = kArmSetpoint6;
-    if (armSetpoint == ArmSetpoint.Seven)
-      pivotSetpoint = kArmSetpoint7;
+  public double getPivotPosition() {
+       return(m_pivotEncoder.getPosition());
+    //return (rawPosition);
+    //return ((rawPosition+zeroOffset)%360);
+    // if (rawPosition - zeroOffset >= 0)
+    //   return (rawPosition - zeroOffset);
+    // else
+    //   return (rawPosition - zeroOffset + 360);
   }
+
+
+
+ @Override
+  public void periodic() {
+   }
+
+  public void setPivotSetpoint(ArmConstants.ArmSetpoint armSetpoint) {
+     if (armSetpoint == ArmConstants.ArmSetpoint.One)
+      pivotSetpoint = ArmConstants.kArmSetpoint1;
+    if (armSetpoint == ArmConstants.ArmSetpoint.Two)
+      pivotSetpoint = ArmConstants.kArmSetpoint2;
+    if (armSetpoint == ArmConstants.ArmSetpoint.Three)
+      pivotSetpoint = ArmConstants.kArmSetpoint3;
+    if (armSetpoint == ArmConstants.ArmSetpoint.Four)
+      pivotSetpoint = ArmConstants.kArmSetpoint4;
+    if (armSetpoint == ArmConstants.ArmSetpoint.Five)
+      pivotSetpoint = ArmConstants.kArmSetpoint5;
+    if (armSetpoint == ArmConstants.ArmSetpoint.Six)
+      pivotSetpoint = ArmConstants.kArmSetpoint6;
+    if (armSetpoint == ArmConstants.ArmSetpoint.Seven)
+      pivotSetpoint = ArmConstants.kArmSetpoint7;
+   }
 
   public double getPivotSetpointPosition() {
     return pivotSetpoint;
   }
 
   public boolean isPivotAtSetpoint() {
-    return getPivotPosition() - pivotSetpoint <= kArmPivotSlop;
+    return getPivotPosition() - pivotSetpoint <= ArmConstants.kArmPivotSlop;
   }
 
   public void pivotDaArm() {
     // set PID coefficients
-    kS = SmartDashboard.getNumber("kS", kS);
-    kG = SmartDashboard.getNumber("kG", kG);
-    kV = SmartDashboard.getNumber("kV", kV);
-    kP = SmartDashboard.getNumber("kP", kP);
-    kI = SmartDashboard.getNumber("kI", kI);
-    kD = SmartDashboard.getNumber("kD", kD);
-    SmartDashboard.putNumber("nkS", pivotSetpoint);
+   // kS = SmartDashboard.getNumber("kS", kS);
+   // kG = SmartDashboard.getNumber("kG", kG);
+   // kV = SmartDashboard.getNumber("kV", kV);
+   // kP = SmartDashboard.getNumber("kP", kP);
+   // kI = SmartDashboard.getNumber("kI", kI);
+   // kD = SmartDashboard.getNumber("kD", kD);
+   // SmartDashboard.putNumber("nkS", pivotSetpoint);
     pivotPIDController.setP(kP);
     pivotPIDController.setI(kI);
     pivotPIDController.setD(kD);
     feedforward.updateArmFeedforward(kS, kG, kV);
-    SmartDashboard.putNumber("FFvalue", feedforward.calculate(Math.toRadians(pivotSetpoint), Math.toRadians(1)));
+   // SmartDashboard.putNumber("FFvalue", feedforward.calculate(Math.toRadians(pivotSetpoint), Math.toRadians(1)));
     pivotPIDController.setReference(pivotSetpoint, CANSparkMax.ControlType.kPosition, 0,
         feedforward.calculate(Math.toRadians(pivotSetpoint), Math.toRadians(1)), ArbFFUnits.kVoltage);
+       
   }
 }
-
-// public class ArmPivot extends SubsystemBase {
-// final SparkAbsoluteEncoder m_ArmEncoder;
-// final CANSparkMax m_ArmSparkMax;
-// final SparkPIDController m_ArmPIDController;
-// {
-
-// m_ArmSparkMax = new CANSparkMax(9, MotorType.kBrushless);
-// m_ArmSparkMax.setInverted(true);
-// m_ArmEncoder = m_ArmSparkMax.getAbsoluteEncoder(Type.kDutyCycle);
-// m_ArmEncoder.setVelocityConversionFactor(365);
-// m_ArmEncoder.setPositionConversionFactor(365);
-
-// m_ArmPIDController = m_ArmSparkMax.getPIDController();
-// m_ArmPIDController.setFeedbackDevice(m_ArmEncoder);
-
-// m_ArmPIDController.setP(.05);
-// m_ArmPIDController.setI(0);
-// m_ArmPIDController.setD(0);
-// m_ArmPIDController.setFF(0);
-
-// m_ArmPIDController.setReference(20,CANSparkMax.ControlType.kPosition);
-// };
-// }
