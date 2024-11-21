@@ -22,10 +22,6 @@ public class ArmPivot extends SubsystemBase {
   double kS = 0.12;
   double kG = 0.495;
   double kV = 0;
-  // double kS = .001;
-  // double kG = .20;
-  // double kV = 5.85;
-  // double kP = .0175;
   double kP = 0.03;
   double kI = 0;
   double kD = 0;
@@ -38,12 +34,6 @@ public ArmPivot() {
     // PID coefficients
     m_armPivot.restoreFactoryDefaults();
     m_armPivot.setIdleMode(IdleMode.kBrake);
-    // SparkAbsoluteEncoder m_pivotEncoder =
-    // m_armPivot.getAbsoluteEncoder(Type.kDutyCycle);
-    // double kP = .0175;
-    // double kP = .01;
-    // double kI = 0;
-    // double kD = 0;
     double kIz = 0;
     double kFF = 0;
     double kMaxOutput = 1;
@@ -62,24 +52,10 @@ public ArmPivot() {
     pivotPIDController.setPositionPIDWrappingMinInput(0);
     pivotPIDController.setPositionPIDWrappingMaxInput(360);
     m_armPivot.setSmartCurrentLimit(30);
-
-    // SmartDashboard.putNumber("kG", kG);
-    // SmartDashboard.putNumber("kV", kV);
-    // SmartDashboard.putNumber("FFvalue", 0);
-    // SmartDashboard.putNumber("kP", kP);
-    // SmartDashboard.putNumber("kI", kI);
-    // SmartDashboard.putNumber("kD", kD);
-    // SmartDashboard.putNumber("FFvalue", feedforward.calculate(Math.toRadians(8.2), Math.toRadians(1)));
   }
 
   public double getPivotPosition() {
        return(m_pivotEncoder.getPosition());
-    //return (rawPosition);
-    //return ((rawPosition+zeroOffset)%360);
-    // if (rawPosition - zeroOffset >= 0)
-    //   return (rawPosition - zeroOffset);
-    // else
-    //   return (rawPosition - zeroOffset + 360);
   }
 
 
@@ -114,19 +90,10 @@ public ArmPivot() {
   }
 
   public void pivotDaArm() {
-    // set PID coefficients
-   // kS = SmartDashboard.getNumber("kS", kS);
-   // kG = SmartDashboard.getNumber("kG", kG);
-   // kV = SmartDashboard.getNumber("kV", kV);
-   // kP = SmartDashboard.getNumber("kP", kP);
-   // kI = SmartDashboard.getNumber("kI", kI);
-   // kD = SmartDashboard.getNumber("kD", kD);
-   // SmartDashboard.putNumber("nkS", pivotSetpoint);
     pivotPIDController.setP(kP);
     pivotPIDController.setI(kI);
     pivotPIDController.setD(kD);
     feedforward.updateArmFeedforward(kS, kG, kV);
-   // SmartDashboard.putNumber("FFvalue", feedforward.calculate(Math.toRadians(pivotSetpoint), Math.toRadians(1)));
     pivotPIDController.setReference(pivotSetpoint, CANSparkMax.ControlType.kPosition, 0,
         feedforward.calculate(Math.toRadians(pivotSetpoint), Math.toRadians(1)), ArbFFUnits.kVoltage);
        

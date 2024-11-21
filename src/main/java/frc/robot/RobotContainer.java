@@ -5,14 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -21,8 +13,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import frc.robot.Constants.ArmConstants.ArmSetpoint;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.FlywheelSubsystem;
@@ -45,12 +35,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import java.util.List;
-
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -88,7 +73,6 @@ public class RobotContainer {
     */
     public RobotContainer() {
         //Register Named Commands
-        //TODO Add commands that we will be using during auto to the named commands list
         NamedCommands.registerCommand("Intake", new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new ArmSetpointCommand(m_armPivot, ArmConstants.ArmSetpoint.One), 
@@ -203,14 +187,12 @@ public class RobotContainer {
                     .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Four)));
 
           }
-            /* TODO
-             * Flywheel start/stop command+button DONE
-             * test limelight button DONE
-             * redo button numbering for new joysticks DONE
-             * Climber command+button DONE
+            /* TODO     
+             * Auto Chooser
+             * Build paths and Autos
              * Integrate LEDs to commands
              * Investigate loop overruns
-             * Remove dead code blocks
+             * Remove dead code blocks IN PROGRESS
              * Find a cleaner way to declare these buttons and commands DONE
              * Look at switch statements for defining lists of things (buttons, autons, setpoints, etc.)
              * Program autons
@@ -241,133 +223,6 @@ public class RobotContainer {
         return autoChooser.getSelected();
 
 
-        //TODO Auto Chooser
-        //TODO Build paths and Autos
-        //return new PathPlannerAuto("B-1-2");
-    /*    // Create config for trajectory
-        TrajectoryConfig config = new TrajectoryConfig(
-            AutoConstants.kMaxSpeedMetersPerSecond,
-            AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-            // Add kinematics to ensure max speed is actually obeyed
-            .setKinematics(DriveConstants.kDriveKinematics);
 
-        var thetaController = new ProfiledPIDController(
-            AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-            thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        Trajectory k_trajectory;  /* = TrajectoryGenerator.generateTrajectory(new Pose2d(0, 1,
-                new Rotation2d(0)),List.of(),new Pose2d(3, 1, new Rotation2d(0)),config);  //This clears a compiler error, but is overwritten later*/
-      /*  SwerveControllerCommand swerveControllerCommand; /* = new SwerveControllerCommand(k_trajectory,
-                m_robotDrive::getPose,
-                // Functional interface to feed supplier
-                DriveConstants.kDriveKinematics,
-
-                // Position controllers
-                new PIDController(AutoConstants.kPXController, 0, 0),
-                new PIDController(AutoConstants.kPYController, 0, 0),
-                thetaController,
-                m_robotDrive::setModuleStates,
-                m_robotDrive);  //This clears a compiler error, but is overwritten later*/
-/*
-        switch (routineString){
-            case OIConstants.kAuton1:         
-                return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
-                .andThen(new FlywheelStartCommand(m_flyWheel))
-                .andThen(new IntakeDeliverCommand(m_intake))
-                .andThen(new FlywheelStopCommand(m_flyWheel))
-                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.One))  
-                .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, 0, 0, true))
-                .andThen(new IntakePickupCommand(m_intake))
-                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Six))
-                //.andThen(new MoveToPoseCommand(m_robotDrive, -1.5, 0, 0, true)) 
-                .andThen(new FlywheelStartCommand(m_flyWheel)))
-                .andThen(new IntakeDeliverCommand(m_intake))
-                .andThen(new FlywheelStopCommand(m_flyWheel)));
-            /*CommandScheduler.getInstance()
-            .schedule((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
-                .andThen(new FlywheelStartCommand(m_flyWheel))
-                .andThen(new IntakeDeliverCommand(m_intake))
-                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.One))
-                .andThen(new IntakeInputCommand(m_intake))
-                .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, 0, 90))));*/
-            //break;
-            /*
-            case OIConstants.kAuton2:
-            return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
-            .andThen(new FlywheelStartCommand(m_flyWheel))
-            .andThen(new IntakeDeliverCommand(m_intake))
-            .andThen(new FlywheelStopCommand(m_flyWheel))
-            .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Six))
-            .andThen(new MoveToPoseCommand(m_robotDrive, 1.5, 0, 0, true))));
-
-            case OIConstants.kAuton3:
-                return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
-                .andThen(new FlywheelStartCommand(m_flyWheel))
-                .andThen(new IntakeDeliverCommand(m_intake))
-                .andThen(new FlywheelStopCommand(m_flyWheel))
-                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Six))
-                .andThen(new MoveToPoseCommand(m_robotDrive, 3.5, 0, 0, true))));
-
-            case OIConstants.kAuton4:
-                return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
-                .andThen(new FlywheelStartCommand(m_flyWheel))
-                .andThen(new IntakeDeliverCommand(m_intake))
-                .andThen(new FlywheelStopCommand(m_flyWheel))
-                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Six))
-                .andThen(new MoveToPoseCommand(m_robotDrive, 1.0, -2.0, 0, true))));
-
-            case OIConstants.kAuton5:
-                return ((new ArmSetpointCommand(m_armPivot, ArmSetpoint.Two)
-                .andThen(new FlywheelStartCommand(m_flyWheel))
-                .andThen(new IntakeDeliverCommand(m_intake))
-                .andThen(new FlywheelStopCommand(m_flyWheel))
-                .andThen(new ArmSetpointCommand(m_armPivot, ArmSetpoint.Six))
-                .andThen(new MoveToPoseCommand(m_robotDrive, 1.0, 2.0, 0, true))));
-
-            case OIConstants.kAuton6:
-                return new SeqAuto(m_robotDrive, m_armPivot, m_flyWheel, m_intake);
-
-            default:
-                return (new MoveToPoseCommand(m_robotDrive, 0, 0, 0, true));
-        }
-
-       */     /*k_trajectory = TrajectoryGenerator.generateTrajectory(new Pose2d(1, 2,
-                new Rotation2d(0)),List.of(),new Pose2d(2, 0, new Rotation2d(0)),config);
-            
-
-            // An example trajectory to follow. All units in meters.
-            //Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-            //  // Start at the origin facing the +X direction
-            //  /*new Pose2d(0, 0, new Rotation2d(0)),
-            //  // Pass through these two interior waypoints, making an 's' curve path
-            //  List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-            //  // End 3 meters straight ahead of where we started, facing forward
-            //  new Pose2d(3, 0, new Rotation2d(0)),*/ //4855
-            //  new Pose2d(0, 1, new Rotation2d(0)),
-            //  // Pass through these two interior waypoints, making an 's' curve path
-            //  List.of(new Translation2d(1, 2), new Translation2d(2, 0)),
-            //  // End 3 meters straight ahead of where we started, facing forward
-            //  new Pose2d(3, 1, new Rotation2d(Math.PI/2)),
-            //  config);
-
-    
-        /*swerveControllerCommand = new SwerveControllerCommand(
-            k_trajectory,
-            m_robotDrive::getPose, // Functional interface to feed supplier
-            DriveConstants.kDriveKinematics,
-
-            // Position controllers
-            new PIDController(AutoConstants.kPXController, 0, 0),
-            new PIDController(AutoConstants.kPYController, 0, 0),
-            thetaController,
-            m_robotDrive::setModuleStates,
-            m_robotDrive);*/
-
-
-        // Reset odometry to the starting pose of the trajectory.
-        //m_robotDrive.resetOdometry(k_trajectory.getInitialPose());
-
-        // Run path following command, then stop at the end.
-        /*return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));*/
     }
 }

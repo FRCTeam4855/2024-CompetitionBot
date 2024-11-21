@@ -7,13 +7,9 @@ package frc.robot;
 import com.pathplanner.lib.commands.FollowPathCommand;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Constants.OIConstants;
-
-
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -26,8 +22,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-
-  private String m_autoSelectedString;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -73,15 +67,7 @@ public class Robot extends TimedRobot {
 
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();//m_autoSelectedString);
-    /*switch(autoSelected) {
-      case "My Auto
-        autonomousCommand = new MyAutoCommand();
-        break;
-      case "Default Auto":
-      default:
-        autonomousCommand = new ExampleCommand();
-        break;
-    }*/
+
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {

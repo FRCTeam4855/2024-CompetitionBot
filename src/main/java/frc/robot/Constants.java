@@ -163,7 +163,6 @@ public final class Constants {
     public static final double kArmSetpoint1 = .05; // Intake
     public static final double kArmSetpoint2 = 12; // Speaker
     public static final double kArmSetpoint3 = 100; // Amp
-    //public static final double kArmSetpoint4 = 15; // Transit
     public static final double kArmSetpoint4 = 55; // Transit
     public static final double kArmSetpoint5 = 15; // D-D-D-Defense 
     public static final double kArmSetpoint6 = 28; // Long shot

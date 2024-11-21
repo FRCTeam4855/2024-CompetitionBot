@@ -78,7 +78,7 @@ public class PrettyLights extends SubsystemBase {
     public final static double C1_AND_C2_GRADIENT = .41;
     public final static double C1_AND_C2_BPM = .43;
     public final static double C1_AND_C2_END_TO_END_BLEND = .45;
-    public final static double END_TO_END_BLEND = .47; // ???
+    public final static double END_TO_END_BLEND = .47; 
     public final static double C1_AND_C2_NO_BLEND = .49;
     public final static double C1_AND_C2_TWINKLES = .51;
     public final static double C1_AND_C2_COLOR_WAVES = .53;
